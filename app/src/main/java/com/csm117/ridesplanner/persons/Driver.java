@@ -1,4 +1,4 @@
-package com.csm117.ridesplanner.ridesplanner.persons;
+package com.csm117.ridesplanner.persons;
 
 import android.graphics.Typeface;
 

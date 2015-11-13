@@ -1,8 +1,6 @@
-package com.csm117.ridesplanner.ridesplanner;
+package com.csm117.ridesplanner;
 
-import com.csm117.ridesplanner.ridesplanner.persons.Driver;
-import com.csm117.ridesplanner.ridesplanner.persons.Person;
-import com.csm117.ridesplanner.ridesplanner.persons.Rider;
+import com.csm117.ridesplanner.persons.Person;
 
 import java.util.List;
 

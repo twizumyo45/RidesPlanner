@@ -1,18 +1,16 @@
-package com.csm117.ridesplanner.ridesplanner;
+package com.csm117.ridesplanner;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.csm117.ridesplanner.ridesplanner.persons.Person;
+import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.persons.Person;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

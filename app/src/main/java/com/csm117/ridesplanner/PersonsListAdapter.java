@@ -1,18 +1,16 @@
-package com.csm117.ridesplanner.ridesplanner;
+package com.csm117.ridesplanner;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.csm117.ridesplanner.ridesplanner.persons.Person;
+import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.persons.Person;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,21 +29,25 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_persons_list, parent, false);
-        }else {
-            return convertView;
+
+            convertView.setPadding(5, 20, 5, 20);
         }
+
         // Lookup view for data population
 
         LinearLayout personsLinearLayout =
                 (LinearLayout) convertView.findViewById(R.id.persons);
-        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        if (personsLinearLayout == null) {
+            personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        TextView personTextView = new TextView(super.getContext());
-        personTextView.setText(person.toString());
-        personTextView.setTypeface(person.getTypeface());
-        personsLinearLayout.addView(personTextView);
+            TextView personTextView = new TextView(super.getContext());
+            if (personTextView == null) {
+                personTextView.setText(person.toString());
+                personTextView.setTypeface(person.getTypeface());
+                personsLinearLayout.addView(personTextView);
+            }
+        }
 
-        convertView.setPadding(5, 20, 5, 20);
         // Return the completed view to render on screen
         return convertView;
     }

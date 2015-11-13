@@ -18,9 +18,19 @@
             android:label="@string/app_name" >
 
         </activity>
+        <!--<activity-->
+            <!--android:name=".ViewRides"-->
+            <!--android:label="@string/title_activity_view_rides"-->
+            <!--android:theme="@style/AppTheme.NoActionBar" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
         <activity
-            android:name=".ViewRides"
-            android:label="@string/title_activity_view_rides"
+            android:name=".ViewPersonsList"
+            android:label="@string/title_activity_view_persons_list"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -18,40 +18,31 @@ import java.util.List;
 /**
  * Created by julianyang on 11/12/15.
  */
-public class RideGroupAdapter extends ArrayAdapter<RideGroup> {
-    public RideGroupAdapter(Context context, List<RideGroup> rideGroups) {
-        super(context, 0, rideGroups);
+public class PersonsListAdapter extends ArrayAdapter<Person> {
+    public PersonsListAdapter(Context context, List<Person> persons) {
+        super(context, 0, persons);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        RideGroup rideGroup = getItem(position);
+        Person person = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_ridegroup, parent, false);
+                    R.layout.item_persons_list, parent, false);
         }else {
             return convertView;
         }
         // Lookup view for data population
-        TextView driverName =
-                (TextView) convertView.findViewById(R.id.driverName);
-        // Populate the data into the template view using the data object
-        driverName.setText(rideGroup.driver.toString());
-        driverName.setTypeface(rideGroup.driver.getTypeface());
 
-        //String[] riderNames = new String[] {"rider1"};
-        List<Person> riderNames = rideGroup.riders;
+        LinearLayout personsLinearLayout =
+                (LinearLayout) convertView.findViewById(R.id.persons);
+        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        LinearLayout riders =
-                (LinearLayout) convertView.findViewById(R.id.riders);
-        riders.setOrientation(LinearLayout.VERTICAL);
-        for(Person rider : riderNames) {
-            TextView riderTextView = new TextView(super.getContext());
-            riderTextView.setText(rider.toString());
-            riders.addView(riderTextView);
-        }
+        TextView personTextView = new TextView(super.getContext());
+        personTextView.setText(person.toString());
+        personsLinearLayout.addView(personTextView);
 
         convertView.setPadding(5, 20, 5, 20);
         // Return the completed view to render on screen

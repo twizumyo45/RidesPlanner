@@ -42,6 +42,7 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
 
         TextView personTextView = new TextView(super.getContext());
         personTextView.setText(person.toString());
+        personTextView.setTypeface(person.getTypeface());
         personsLinearLayout.addView(personTextView);
 
         convertView.setPadding(5, 20, 5, 20);

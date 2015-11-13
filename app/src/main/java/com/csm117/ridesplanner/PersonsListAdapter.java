@@ -23,30 +23,26 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        Person person = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_persons_list, parent, false);
-
             convertView.setPadding(5, 20, 5, 20);
         }
 
-        // Lookup view for data population
+        // Get the data item for this position
+        Person person = getItem(position);
 
+        // Lookup view for data population
         LinearLayout personsLinearLayout =
                 (LinearLayout) convertView.findViewById(R.id.persons);
-        if (personsLinearLayout == null) {
-            personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
-            TextView personTextView = new TextView(super.getContext());
-            if (personTextView == null) {
-                personTextView.setText(person.toString());
-                personTextView.setTypeface(person.getTypeface());
-                personsLinearLayout.addView(personTextView);
-            }
-        }
+        personsLinearLayout.removeAllViews();
+        TextView personTextView = new TextView(super.getContext());
+        personTextView.setText(person.toString());
+        personTextView.setTypeface(person.getTypeface());
+        personsLinearLayout.addView(personTextView);
 
         // Return the completed view to render on screen
         return convertView;

@@ -29,9 +29,9 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
                     R.layout.item_ridegroup, parent, false);
-        }else {
-            return convertView;
+            convertView.setPadding(5, 20, 5, 20);
         }
+
         // Lookup view for data population
         TextView driverName =
                 (TextView) convertView.findViewById(R.id.driverName);
@@ -45,13 +45,13 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup> {
         LinearLayout riders =
                 (LinearLayout) convertView.findViewById(R.id.riders);
         riders.setOrientation(LinearLayout.VERTICAL);
+        riders.removeAllViews();
         for(Person rider : riderNames) {
             TextView riderTextView = new TextView(super.getContext());
             riderTextView.setText(rider.toString());
             riders.addView(riderTextView);
         }
 
-        convertView.setPadding(5, 20, 5, 20);
         // Return the completed view to render on screen
         return convertView;
     }

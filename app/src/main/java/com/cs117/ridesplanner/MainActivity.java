@@ -1,71 +1,73 @@
 package com.cs117.ridesplanner;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.gdata.client.spreadsheet.SpreadsheetService;
-import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
-import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
-import com.google.gdata.util.AuthenticationException;
-import com.google.gdata.util.ServiceException;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
+public class MainActivity extends Activity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener {
 
-public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
-    public void test() throws AuthenticationException, MalformedURLException, IOException, ServiceException {
-        SpreadsheetService service =
-                new SpreadsheetService("MySpreadsheetIntegration-v1");
+    /* RequestCode for resolutions involving sign-in */
+    private static final int RC_SIGN_IN = 1;
 
-        // TODO: Authorize the service object for a specific user (see other sections)
+    /* RequestCode for resolutions to get GET_ACCOUNTS permission on M */
+    private static final int RC_PERM_GET_ACCOUNTS = 2;
 
-        // Define the URL to request.  This should never change.
-        URL SPREADSHEET_FEED_URL = new URL(
-                "https://spreadsheets.google.com/feeds/spreadsheets/private/full");
+    /* Keys for persisting instance variables in savedInstanceState */
+    private static final String KEY_IS_RESOLVING = "is_resolving";
+    private static final String KEY_SHOULD_RESOLVE = "should_resolve";
 
-        // Make a request to the API and get all spreadsheets.
-        SpreadsheetFeed feed = service.getFeed(SPREADSHEET_FEED_URL, SpreadsheetFeed.class);
-        List<SpreadsheetEntry> spreadsheets = feed.getEntries();
+    /* Client for accessing Google APIs */
+    private GoogleApiClient mGoogleApiClient;
 
-        // Iterate through all of the spreadsheets returned
-        for (SpreadsheetEntry spreadsheet : spreadsheets) {
-            // Print the title of this spreadsheet to the screen
-            Log.w("sheets", spreadsheet.getTitle().getPlainText());
-        }
-    }
+    /* View to display current status (signed-in, signed-out, disconnected, etc) */
+    private TextView mStatus;
+
+    // [START resolution_variables]
+    /* Is there a ConnectionResult resolution in progress? */
+    private boolean mIsResolving = false;
+
+    /* Should we automatically resolve ConnectionResults when possible? */
+    private boolean mShouldResolve = false;
+    // [END resolution_variables]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try{
-            this.test();
-        }
-        catch(Exception e){
-            Log.d("sheets", "ERROR THROWN: " + e.getMessage());
-        }
-        Log.w("myApp", "about to create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        // Build GoogleApiClient with access to basic profile
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API)
+                .addScope(new Scope(Scopes.PROFILE))
+                .addScope(new Scope(Scopes.EMAIL))
+                .build();
     }
 
     @Override
@@ -88,5 +90,121 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        // onConnected indicates that an account was selected on the device, that the selected
+        // account has granted any requested permissions to our app and that we were able to
+        // establish a service connection to Google Play services.
+        Log.d(TAG, "onConnected:" + bundle);
+        mShouldResolve = false;
+
+        // Show the signed-in UI
+//        showSignedInUI();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
+
+        if (requestCode == RC_SIGN_IN) {
+            // If the error resolution was not successful we should not resolve further.
+            if (resultCode != RESULT_OK) {
+                mShouldResolve = false;
+            }
+
+            mIsResolving = false;
+            mGoogleApiClient.connect();
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.sign_in_button) {
+            onSignInClicked();
+        }
+//        if (view.getId() == R.id.sign_out_button) {
+//            onSignOutClicked()
+//        }
+    }
+
+    private void onSignInClicked() {
+        // User clicked the sign-in button, so begin the sign-in process and automatically
+        // attempt to resolve any errors that occur.
+        mShouldResolve = true;
+        mGoogleApiClient.connect();
+
+        // Show a message to the user that we are signing in.
+//        mStatus.setText(R.string.signing_in);
+    }
+
+    private void onSignOutClicked() {
+        // Clear the default account so that GoogleApiClient will not automatically
+        // connect in the future.
+        if (mGoogleApiClient.isConnected()) {
+            Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+            mGoogleApiClient.disconnect();
+        }
+
+//        showSignedOutUI();
+    }
+
+    public void signUpClicked(View v){
+        try {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://accounts.google.com/signup"));
+            startActivity(browserIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No application can handle this request."
+                    + " Please install a webbrowser", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // Could not connect to Google Play Services.  The user needs to select an account,
+        // grant permissions or resolve an error in order to sign in. Refer to the javadoc for
+        // ConnectionResult to see possible error codes.
+        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+
+        if (!mIsResolving && mShouldResolve) {
+            if (connectionResult.hasResolution()) {
+                try {
+                    connectionResult.startResolutionForResult(this, RC_SIGN_IN);
+                    mIsResolving = true;
+                } catch (IntentSender.SendIntentException e) {
+                    Log.e(TAG, "Could not resolve ConnectionResult.", e);
+                    mIsResolving = false;
+                    mGoogleApiClient.connect();
+                }
+            } else {
+                // Could not resolve the connection result, show the user an
+                // error dialog.
+//                showErrorDialog(connectionResult);
+            }
+        } else {
+            // Show the signed-out UI
+//            showSignedOutUI();
+        }
     }
 }

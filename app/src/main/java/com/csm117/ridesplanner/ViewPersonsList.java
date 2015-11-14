@@ -28,7 +28,7 @@ public class ViewPersonsList extends AppCompatActivity implements NavigationView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_persons_list_navigation);
+        setContentView(R.layout.view_persons_list_navigation_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -72,14 +72,13 @@ public class ViewPersonsList extends AppCompatActivity implements NavigationView
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
+        if (id == R.id.nav_view_rides) {
             // Handle the camera action
             Intent nextScreen = new Intent(getApplicationContext(),  ViewRides.class);
             startActivity(nextScreen);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_view_persons_list) {
             Intent nextScreen = new Intent(getApplicationContext(),  ViewPersonsList.class);
             startActivity(nextScreen);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

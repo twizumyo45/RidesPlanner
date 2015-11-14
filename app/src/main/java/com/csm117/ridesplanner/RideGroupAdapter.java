@@ -28,7 +28,7 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup> {
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.item_ridegroup, parent, false);
+                    R.layout.view_rides_ridegroup_item, parent, false);
             convertView.setPadding(5, 20, 5, 20);
         }
 

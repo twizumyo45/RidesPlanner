@@ -15,22 +15,21 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.csm117.ridesplanner.persons.Driver;
-import com.csm117.ridesplanner.persons.Rider;
+import com.csm117.ridesplanner.entities.Driver;
+import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.ridesplanner.R;
-import com.csm117.ridesplanner.persons.Person;
+import com.csm117.ridesplanner.entities.Person;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPersonsList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class ViewPersonsList extends ViewNavigation{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_persons_list_navigation_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        super.setUpNav();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,35 +53,13 @@ public class ViewPersonsList extends AppCompatActivity implements NavigationView
         ArrayAdapter<Person> adapter = new PersonsListAdapter(this, persons);
         listview.setAdapter(adapter);
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_view_rides) {
-            // Handle the camera action
-            Intent nextScreen = new Intent(getApplicationContext(),  ViewRides.class);
-            startActivity(nextScreen);
-        } else if (id == R.id.nav_view_persons_list) {
-            Intent nextScreen = new Intent(getApplicationContext(),  ViewPersonsList.class);
-            startActivity(nextScreen);
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
     }
 }

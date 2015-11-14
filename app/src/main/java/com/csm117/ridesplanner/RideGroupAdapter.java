@@ -8,8 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.ridesplanner.R;
-import com.csm117.ridesplanner.persons.Person;
+import com.csm117.ridesplanner.entities.Person;
 
 import java.util.List;
 

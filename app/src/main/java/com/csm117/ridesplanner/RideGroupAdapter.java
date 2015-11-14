@@ -1,6 +1,7 @@
 package com.csm117.ridesplanner;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csm117.ridesplanner.entities.RideGroup;
+import com.csm117.ridesplanner.onClickListeners.OnClickPersonListener;
 import com.csm117.ridesplanner.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
 
@@ -17,9 +19,13 @@ import java.util.List;
 /**
  * Created by julianyang on 11/12/15.
  */
-public class RideGroupAdapter extends ArrayAdapter<RideGroup> {
+
+public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
+    OnClickPersonListener onClickPersonListener_;
+
     public RideGroupAdapter(Context context, List<RideGroup> rideGroups) {
         super(context, 0, rideGroups);
+        onClickPersonListener_ = new OnClickPersonListener();
     }
 
     @Override
@@ -49,6 +55,7 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup> {
         riders.removeAllViews();
         for(Person rider : riderNames) {
             TextView riderTextView = new TextView(super.getContext());
+            riderTextView.setOnClickListener(onClickPersonListener_);
             riderTextView.setText(rider.toString());
             riders.addView(riderTextView);
         }

@@ -25,7 +25,6 @@ public class ViewRides extends ViewNavigation {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_rides_navigation_activity);
         super.setUpNav();
@@ -39,6 +38,8 @@ public class ViewRides extends ViewNavigation {
                         .setAction("Action", null).show();
             }
         });
+
+        //TODO: link with real sheets
         GridView gridview = (GridView) findViewById(R.id.gridView);
 
         List<RideGroup> rideGroups = new ArrayList<RideGroup>();
@@ -55,15 +56,6 @@ public class ViewRides extends ViewNavigation {
         }
         ArrayAdapter<RideGroup> adapter = new RideGroupAdapter(this, rideGroups);
         gridview.setAdapter(adapter);
-
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
 
     }
 

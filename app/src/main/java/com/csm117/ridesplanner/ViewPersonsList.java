@@ -39,6 +39,8 @@ public class ViewPersonsList extends ViewNavigation{
                         .setAction("Action", null).show();
             }
         });
+
+        //TODO: link with real sheets
         ListView listview = (ListView) findViewById(R.id.listView);
 
         List<Person> persons = new ArrayList<Person>();
@@ -53,13 +55,5 @@ public class ViewPersonsList extends ViewNavigation{
         ArrayAdapter<Person> adapter = new PersonsListAdapter(this, persons);
         listview.setAdapter(adapter);
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
     }
 }

@@ -15,4 +15,18 @@ public class RideGroup {
         this.driver = driver;
         this.riders = riders;
     }
+
+    public boolean remove(Person personToBeDeleted){
+        for (Person r: riders){
+            if (r==personToBeDeleted) {
+                riders.remove(r);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void add(Person personToBeAdded){
+        riders.add(personToBeAdded);
+    }
 }

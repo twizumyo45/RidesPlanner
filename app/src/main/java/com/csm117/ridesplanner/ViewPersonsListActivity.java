@@ -1,34 +1,35 @@
 package com.csm117.ridesplanner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.widget.ListView;
 
-import com.csm117.ridesplanner.entities.RideGroup;
-import com.csm117.ridesplanner.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Driver;
-import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Rider;
+import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.entities.Person;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewRides extends ViewNavigation {
+public class ViewPersonsListActivity extends ViewNavigation{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_rides_navigation_activity);
+        setContentView(R.layout.view_persons_list_navigation_activity);
         super.setUpNav();
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,23 +41,19 @@ public class ViewRides extends ViewNavigation {
         });
 
         //TODO: link with real sheets
-        GridView gridview = (GridView) findViewById(R.id.gridView);
+        ListView listview = (ListView) findViewById(R.id.listView);
 
-        List<RideGroup> rideGroups = new ArrayList<RideGroup>();
-        List<List<Person>> riders = new ArrayList<List<Person>>();
+        List<Person> persons = new ArrayList<Person>();
+
         for (int k = 0; k < 5; k++) {
-            riders.add(new ArrayList<Person>());
-            for (int i = 0; i < 4; i++) {
-                riders.get(k).add(new Rider("rider" + (k * 4 + i)));
-            }
+            persons.add(new Driver("driver"+k));
         }
-        for (int i = 0; i < 5; i++) {
-            Person driver = new Driver("driver" + i);
-            rideGroups.add(new RideGroup(driver, riders.get(i)));
+        for (int k = 0; k < 20; k++) {
+            persons.add(new Rider("rider"+k));
         }
-        ArrayAdapter<RideGroup> adapter = new RideGroupAdapter(this, rideGroups);
-        gridview.setAdapter(adapter);
+
+        ArrayAdapter<Person> adapter = new PersonsListAdapter(this, persons);
+        listview.setAdapter(adapter);
 
     }
-
 }

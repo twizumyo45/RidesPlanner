@@ -2,6 +2,9 @@ package com.csm117.ridesplanner;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.text.Spannable;
+import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +24,19 @@ import java.util.List;
  */
 
 public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
-    OnClickPersonListener onClickPersonListener_;
 
-    public RideGroupAdapter(Context context, List<RideGroup> rideGroups) {
+    ViewRidesActivity viewRidesActivity_;
+
+    public RideGroupAdapter(Context context, List<RideGroup> rideGroups, ViewRidesActivity vra) {
         super(context, 0, rideGroups);
-        onClickPersonListener_ = new OnClickPersonListener();
+        viewRidesActivity_ = vra;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         RideGroup rideGroup = getItem(position);
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(
@@ -42,24 +47,26 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
         // Lookup view for data population
         TextView driverName =
                 (TextView) convertView.findViewById(R.id.driverName);
+
         // Populate the data into the template view using the data object
         driverName.setText(rideGroup.driver.toString());
         driverName.setTypeface(rideGroup.driver.getTypeface());
 
-        //String[] riderNames = new String[] {"rider1"};
+        // further populate the rest of the TextViews in this LinearLayout
         List<Person> riderNames = rideGroup.riders;
-
         LinearLayout riders =
                 (LinearLayout) convertView.findViewById(R.id.riders);
         riders.setOrientation(LinearLayout.VERTICAL);
         riders.removeAllViews();
+
         for(Person rider : riderNames) {
             TextView riderTextView = new TextView(super.getContext());
-            riderTextView.setOnClickListener(onClickPersonListener_);
+            riderTextView.setSelected(true);
+            OnClickPersonListener onClickPersonListener = new OnClickPersonListener(viewRidesActivity_, rider);
+            riderTextView.setOnClickListener(onClickPersonListener);
             riderTextView.setText(rider.toString());
             riders.addView(riderTextView);
         }
-
         // Return the completed view to render on screen
         return convertView;
     }

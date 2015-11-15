@@ -1,7 +1,6 @@
 package com.csm117.ridesplanner;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,10 +37,10 @@ public abstract class ViewNavigation extends AppCompatActivity implements Naviga
 
         if (id == R.id.nav_view_rides) {
             // Handle the camera action
-            Intent nextScreen = new Intent(getApplicationContext(),  ViewRides.class);
+            Intent nextScreen = new Intent(getApplicationContext(),  ViewRidesActivity.class);
             startActivity(nextScreen);
         } else if (id == R.id.nav_view_persons_list) {
-            Intent nextScreen = new Intent(getApplicationContext(),  ViewPersonsList.class);
+            Intent nextScreen = new Intent(getApplicationContext(),  ViewPersonsListActivity.class);
             startActivity(nextScreen);
         }
 

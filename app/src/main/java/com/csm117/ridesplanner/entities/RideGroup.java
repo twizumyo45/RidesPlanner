@@ -16,6 +16,15 @@ public class RideGroup {
         this.riders = riders;
     }
 
+    public boolean contains(Person person){
+        for (Person r: riders){
+            if (r==person) {
+                return true;
+            }
+        }
+        return false;
+    }
+    //returns whether or not the person was successfully removed
     public boolean remove(Person personToBeDeleted){
         for (Person r: riders){
             if (r==personToBeDeleted) {

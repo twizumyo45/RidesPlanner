@@ -29,6 +29,7 @@ public class OnClickPersonListener implements View.OnClickListener{
             viewRidesActivity_.selectedPersons_.remove(person_);
             Log.d("listener", "removing: " + person_.toString());
         }
+        viewRidesActivity_.updateButtonVisibility();
         return;
     }
 }

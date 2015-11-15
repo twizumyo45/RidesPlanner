@@ -65,21 +65,53 @@ public class ViewRidesActivity extends ViewNavigation {
         fabSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //check the correct number of ppl to be swapped are selected (2 ppl)
                 if (selectedPersons_.size() == 2) {
-                    Snackbar.make(view, "Swapping selected riders!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    for (RideGroup rg : rideGroups_) {
-                        if (rg.remove(selectedPersons_.get(0))) {
-                            rg.add(selectedPersons_.get(1));
-                        } else if (rg.remove(selectedPersons_.get(1))) {
-                            rg.add(selectedPersons_.get(0));
+                    //check that the ppl are in different groups
+                    boolean inDiffGroups = true;
+                    for (RideGroup rg: rideGroups_){
+                        if (rg.contains(selectedPersons_.get(0)) && rg.contains(selectedPersons_.get(1)))
+                            inDiffGroups = false;
+                    }
+
+                    if (inDiffGroups) {
+                        for (RideGroup rg : rideGroups_) {
+                            if (rg.remove(selectedPersons_.get(0))) {
+                                rg.add(selectedPersons_.get(1));
+                            } else if (rg.remove(selectedPersons_.get(1))) {
+                                rg.add(selectedPersons_.get(0));
+                            }
+                        }
+                    }
+                    else{
+                        for (RideGroup rg : rideGroups_) {
+                            if (rg.contains(selectedPersons_.get(0)) && rg.contains(selectedPersons_.get(0))){
+                                rg.remove(selectedPersons_.get(0));
+                                rg.remove(selectedPersons_.get(1));
+                                rg.add(selectedPersons_.get(0));
+                                rg.add(selectedPersons_.get(1));
+                            }
                         }
                     }
                     adapter_.notifyDataSetChanged();
+                    Snackbar.make(view, "Swapping selected riders!", Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
                     selectedPersons_.clear();
                 }
             }
         });
+    }
+    public void updateButtonVisibility(){
+        FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
+        FloatingActionButton fabSwap = (FloatingActionButton) findViewById(R.id.fabSwap);
+        fabDelete.setVisibility(View.INVISIBLE);
+        fabSwap.setVisibility(View.INVISIBLE);
+        if(selectedPersons_.size() == 1){
+            fabDelete.setVisibility(View.VISIBLE);
+        }
+        else if (selectedPersons_.size() == 2){
+            fabSwap.setVisibility(View.VISIBLE);
+        }
     }
 
 }

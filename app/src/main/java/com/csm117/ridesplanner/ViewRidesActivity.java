@@ -45,6 +45,7 @@ public class ViewRidesActivity extends ViewNavigation {
         adapter_ = new RideGroupAdapter(this, rideGroups_, this);
         gridview.setAdapter(adapter_);
 
+        //TODO: lol clean dis up
         FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
         fabDelete.setOnClickListener(new View.OnClickListener() {
             @Override

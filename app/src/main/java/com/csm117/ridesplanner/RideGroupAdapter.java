@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.onClickListeners.OnClickPersonListener;
-import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
 
 import java.util.List;

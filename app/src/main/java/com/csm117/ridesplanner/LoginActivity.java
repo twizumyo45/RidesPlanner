@@ -29,7 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.R;
 
 import java.util.ArrayList;
 import java.util.List;

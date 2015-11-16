@@ -17,7 +17,7 @@ import android.widget.ListView;
 
 import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.Rider;
-import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
 
 import java.util.ArrayList;

@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.R;
 
 /**
  * Created by Roger on 11/13/2015.

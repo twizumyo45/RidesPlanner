@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.csm117.ridesplanner.entities.RideGroup;
-import com.csm117.ridesplanner.ridesplanner.R;
+import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Rider;

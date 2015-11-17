@@ -16,6 +16,7 @@
     <string name="title_activity_view_rides">ViewRides</string>
     <string name="title_activity_view_persons_list">View Everybody</string>
     <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="title_login">Log into RidesPlanner</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -6,6 +6,8 @@
             android:title="Rides" />
         <item android:id="@+id/nav_view_persons_list" android:icon="@android:drawable/ic_menu_compass"
             android:title="Persons" />
+        <item android:id="@+id/nav_login" android:icon="@android:drawable/ic_input_add"
+            android:title="Login" />
     </group>
 
 </menu>

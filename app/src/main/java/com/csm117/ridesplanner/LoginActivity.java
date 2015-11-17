@@ -52,7 +52,7 @@ import com.csm117.ridesplanner.R;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends ViewNavigation {
 
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
@@ -69,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+        super.setUpNav();
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Calling Google Apps Script Execution API ...");
         // Initialize credentials and service object.

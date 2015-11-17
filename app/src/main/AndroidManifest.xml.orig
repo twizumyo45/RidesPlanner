@@ -16,21 +16,27 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.csm117.ridesplanner.LoginActivity"
+<<<<<<< HEAD
+            android:label="@string/app_name"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+=======
             android:label="@string/title_login">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
+>>>>>>> 41cf0e21593cea61deb86afdaae8158a505d0467
         </activity>
         <activity
             android:name="com.csm117.ridesplanner.ViewRidesActivity"
             android:label="@string/title_activity_view_rides"
             android:theme="@style/AppTheme.NoActionBar" >
 
-             <intent-filter>
-                 <action android:name="android.intent.action.MAIN" />
-                 <category android:name="android.intent.category.LAUNCHER" />
-             </intent-filter>
+
         </activity>
         <activity
             android:name="com.csm117.ridesplanner.ViewPersonsListActivity"

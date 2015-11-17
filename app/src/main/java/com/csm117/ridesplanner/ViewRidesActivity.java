@@ -3,6 +3,7 @@ package com.csm117.ridesplanner;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
@@ -69,6 +70,10 @@ public class ViewRidesActivity extends ViewNavigation {
         else if (selectedPersons_.size() == 2){
             fabSwap.setVisibility(View.VISIBLE);
         }
+    }
+    public void clearSelections(){
+        findViewById(R.id.driverName);
+        findViewById(R.id.riders);
     }
 
 }

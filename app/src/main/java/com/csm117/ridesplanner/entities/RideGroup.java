@@ -99,8 +99,6 @@ public class RideGroup {
             }
         }
 
-
-
         Log.d("MoveRider", "stepNum: " + stepNum);
         return stepNum == 2;
     }

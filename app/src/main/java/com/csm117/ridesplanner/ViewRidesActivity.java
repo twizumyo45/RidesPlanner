@@ -2,19 +2,16 @@ package com.csm117.ridesplanner;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import com.csm117.ridesplanner.entities.RideGroup;
-import com.csm117.ridesplanner.R;
+import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.DeleteRidersFabListener;
 import com.csm117.ridesplanner.onClickListeners.MoveRiderFabListener;
 import com.csm117.ridesplanner.onClickListeners.SwapRidersFabListener;
-import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.Person;
-import com.csm117.ridesplanner.entities.Rider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +19,13 @@ import java.util.List;
 public class ViewRidesActivity extends ViewNavigation {
     //TODO: make getters and setters instead of public
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
-    public List<RideGroup> rideGroups_ = new ArrayList<RideGroup>();
+    public List<RideGroup> rideGroups_ = Sheet.getRideGroups();
     public List<List<Person>> riders_ = new ArrayList<List<Person>>();
     public ArrayAdapter<RideGroup> adapter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        selectedPersons_ = new ArrayList<Person>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_rides_navigation_activity);
         super.setUpNav();
@@ -35,16 +33,8 @@ public class ViewRidesActivity extends ViewNavigation {
         //TODO: link with real sheets
         GridView gridview = (GridView) findViewById(R.id.gridView);
 
-        for (int k = 0; k < 5; k++) {
-            riders_.add(new ArrayList<Person>());
-            for (int i = 0; i < 4; i++) {
-                riders_.get(k).add(new Rider("rider" + (k * 4 + i)));
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            Person driver = new Driver("driver" + i);
-            rideGroups_.add(new RideGroup(driver, riders_.get(i)));
-        }
+        Sheet.sync();
+
         adapter_ = new RideGroupAdapter(this, rideGroups_, this);
         gridview.setAdapter(adapter_);
 

@@ -19,11 +19,13 @@ import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
+import com.csm117.ridesplanner.entities.Sheet;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
+    List<Person> unsentPersons_ = Sheet.getUnsentPersons();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +44,9 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
         //TODO: link with real sheets
         ListView listview = (ListView) findViewById(R.id.listView);
+        Sheet.sync();
 
-        List<Person> persons = new ArrayList<Person>();
-
-        for (int k = 0; k < 5; k++) {
-            persons.add(new Driver("driver"+k));
-        }
-        for (int k = 0; k < 20; k++) {
-            persons.add(new Rider("rider"+k));
-        }
-
-        ArrayAdapter<Person> adapter = new PersonsListAdapter(this, persons);
+        ArrayAdapter<Person> adapter = new PersonsListAdapter(this, unsentPersons_);
         listview.setAdapter(adapter);
 
     }

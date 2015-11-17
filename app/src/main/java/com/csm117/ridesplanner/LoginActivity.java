@@ -1,351 +1,414 @@
 package com.csm117.ridesplanner;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import com.csm117.ridesplanner.onClickListeners.OnClickPersonListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestInitializer;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+
+
+
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.api.services.script.model.*;
+import java.util.Map;
+
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.view.KeyEvent;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.csm117.ridesplanner.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
+    GoogleAccountCredential mCredential;
+    private TextView mOutputText;
+    ProgressDialog mProgress;
+    private TextView mSignedInAs;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
-    // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    static final int REQUEST_ACCOUNT_PICKER = 1000;
+    static final int REQUEST_AUTHORIZATION = 1001;
+    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final String PREF_ACCOUNT_NAME = "accountName";
+    private static final String[] SCOPES = { "https://www.googleapis.com/auth/drive" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
+        mProgress = new ProgressDialog(this);
+        mProgress.setMessage("Calling Google Apps Script Execution API ...");
+        // Initialize credentials and service object.
+        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff())
+                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
 
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mSignedInAs = (TextView) this.findViewById(R.id.signed_in_as);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button signIn = (Button) this.findViewById(R.id.sign_in_button);
+        signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                if (isGooglePlayServicesAvailable()) {
+                    chooseAccount();
+                } else {
+                    Snackbar.make(view, "Google Play Services required: " +
+                            "after installing, close and relaunch this app.",
+                            Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null).show();
+                }
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-    }
-
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
     }
 
     /**
-     * Callback received when a permissions request has been completed.
+     * Extend the given HttpRequestInitializer (usually a credentials object)
+     * with additional initialize() instructions.
+     *
+     * @param requestInitializer the initializer to copy and adjust; typically
+     *         a credential object.
+     * @return an initializer with an extended read timeout.
      */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
+    private static HttpRequestInitializer setHttpTimeout(
+            final HttpRequestInitializer requestInitializer) {
+        return new HttpRequestInitializer() {
+            @Override
+            public void initialize(HttpRequest httpRequest)
+                    throws java.io.IOException {
+                requestInitializer.initialize(httpRequest);
+                // This allows the API to call (and avoid timing out on)
+                // functions that take up to 6 minutes to complete (the maximum
+                // allowed script run time), plus a little overhead.
+                httpRequest.setReadTimeout(380000);
             }
-        }
-    }
-
-
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
-
-        // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
-
-        boolean cancel = false;
-        View focusView = null;
-
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
-        } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
-        }
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(this,
-                // Retrieve data rows for the device user's 'profile' contact.
-                Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
-
-                // Select only email addresses.
-                ContactsContract.Contacts.Data.MIMETYPE +
-                        " = ?", new String[]{ContactsContract.CommonDataKinds.Email
-                .CONTENT_ITEM_TYPE},
-
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
-                ContactsContract.Contacts.Data.IS_PRIMARY + " DESC");
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        addEmailsToAutoComplete(emails);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
-    }
-
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
         };
-
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
     }
-
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
+    /**
+     * Called whenever this activity is pushed to the foreground, such as after
+     * a call to onCreate().
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (isGooglePlayServicesAvailable()) {
+//            refreshResults();
+//        } else {
+//            mOutputText.setText("Google Play Services required: " +
+//                    "after installing, close and relaunch this app.");
+//        }
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     * Called when an activity launched here (specifically, AccountPicker
+     * and authorization) exits, giving you the requestCode you started it with,
+     * the resultCode it returned, and any additional data from it.
+     * @param requestCode code indicating which activity result is incoming.
+     * @param resultCode code indicating the result of the incoming
+     *     activity result.
+     * @param data Intent (containing result data) returned by incoming
+     *     activity result.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+    @Override
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case REQUEST_GOOGLE_PLAY_SERVICES:
+                if (resultCode != RESULT_OK) {
+                    isGooglePlayServicesAvailable();
+                }
+                break;
+            case REQUEST_ACCOUNT_PICKER:
+                if (resultCode == RESULT_OK && data != null &&
+                        data.getExtras() != null) {
+                    String accountName =
+                            data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                    if (accountName != null) {
+                        mCredential.setSelectedAccountName(accountName);
+                        SharedPreferences settings =
+                                getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(PREF_ACCOUNT_NAME, accountName);
+                        editor.apply();
+                        mSignedInAs.setText(accountName);
+                    }
+                } else if (resultCode == RESULT_CANCELED) {
+                    mOutputText.setText("Account unspecified.");
+                    mSignedInAs.setText("n/a");
+                }
+                break;
+            case REQUEST_AUTHORIZATION:
+                if (resultCode != RESULT_OK) {
+                    chooseAccount();
+                }
+                break;
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
+    /**
+     * Attempt to get a set of data from the Google Apps Script Execution API to display. If the
+     * email address isn't known yet, then call chooseAccount() method so the
+     * user can pick an account.
+     */
+    private void refreshResults() {
+        if (mCredential.getSelectedAccountName() == null) {
+            chooseAccount();
+        } else {
+            if (isDeviceOnline()) {
+                new MakeRequestTask(mCredential).execute();
+            } else {
+                mOutputText.setText("No network connection available.");
             }
+        }
+    }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
+    /**
+     * Starts an activity in Google Play Services so the user can pick an
+     * account.
+     */
+    private void chooseAccount() {
+        startActivityForResult(
+                mCredential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
+    }
+
+    /**
+     * Checks whether the device currently has a network connection.
+     * @return true if the device has a network connection, false otherwise.
+     */
+    private boolean isDeviceOnline() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
+    /**
+     * Check that Google Play services APK is installed and up to date. Will
+     * launch an error dialog for the user to update Google Play Services if
+     * possible.
+     * @return true if Google Play Services is available and up to
+     *     date on this device; false otherwise.
+     */
+    private boolean isGooglePlayServicesAvailable() {
+        final int connectionStatusCode =
+                GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
+            showGooglePlayServicesAvailabilityErrorDialog(connectionStatusCode);
+            return false;
+        } else if (connectionStatusCode != ConnectionResult.SUCCESS ) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Display an error dialog showing that Google Play Services is missing
+     * or out of date.
+     * @param connectionStatusCode code describing the presence (or lack of)
+     *     Google Play Services on this device.
+     */
+    void showGooglePlayServicesAvailabilityErrorDialog(
+            final int connectionStatusCode) {
+        Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
+                connectionStatusCode,
+                LoginActivity.this,
+                REQUEST_GOOGLE_PLAY_SERVICES);
+        dialog.show();
+    }
+
+    /**
+     * An asynchronous task that handles the Google Apps Script Execution API call.
+     * Placing the API calls in their own task ensures the UI stays responsive.
+     */
+    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+        private com.google.api.services.script.Script mService = null;
+        private Exception mLastError = null;
+
+        public MakeRequestTask(GoogleAccountCredential credential) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.script.Script.Builder(
+                    transport, jsonFactory, setHttpTimeout(credential))
+                    .setApplicationName("Google Apps Script Execution API Android Quickstart")
+                    .build();
+        }
+
+        /**
+         * Background task to call Google Apps Script Execution API.
+         * @param params no parameters needed for this task.
+         */
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            try {
+                return getDataFromApi();
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        /**
+         * Call the API to run an Apps Script function that returns a list
+         * of folders within the user's root directory on Drive.
+         *
+         * @return list of String folder names and their IDs
+         * @throws IOException
+         */
+        private List<String> getDataFromApi()
+                throws IOException, GoogleAuthException {
+            // ID of the script to call. Acquire this from the Apps Script editor,
+            // under Publish > Deploy as API executable.
+            String scriptId = "MkPlmM8tc25HedhUPYY-U7sw9KAQap61g";
+
+            List<String> folderList = new ArrayList<String>();
+
+            // Create an execution request object.
+            ExecutionRequest request = new ExecutionRequest()
+                    .setFunction("getFoldersUnderRoot");
+
+            // Make the request.
+            Operation op =
+                    mService.scripts().run(scriptId, request).execute();
+
+            // Print results of request.
+            if (op.getError() != null) {
+                throw new IOException(getScriptError(op));
+            }
+            if (op.getResponse() != null &&
+                    op.getResponse().get("result") != null) {
+                // The result provided by the API needs to be cast into
+                // the correct type, based upon what types the Apps Script
+                // function returns. Here, the function returns an Apps
+                // Script Object with String keys and values, so must be
+                // cast into a Java Map (folderSet).
+                Map<String, String> folderSet =
+                        (Map<String, String>)(op.getResponse().get("result"));
+
+                for (String id: folderSet.keySet()) {
+                    folderList.add(
+                            String.format("%s (%s)", folderSet.get(id), id));
                 }
             }
 
-            // TODO: register the new account here.
-            return true;
+            return folderList;
+        }
+
+        /**
+         * Interpret an error response returned by the API and return a String
+         * summary.
+         *
+         * @param op the Operation returning an error response
+         * @return summary of error response, or null if Operation returned no
+         *     error
+         */
+        private String getScriptError(Operation op) {
+            if (op.getError() == null) {
+                return null;
+            }
+
+            // Extract the first (and only) set of error details and cast as a Map.
+            // The values of this map are the script's 'errorMessage' and
+            // 'errorType', and an array of stack trace elements (which also need to
+            // be cast as Maps).
+            Map<String, Object> detail = op.getError().getDetails().get(0);
+            List<Map<String, Object>> stacktrace =
+                    (List<Map<String, Object>>)detail.get("scriptStackTraceElements");
+
+            java.lang.StringBuilder sb =
+                    new StringBuilder("\nScript error message: ");
+            sb.append(detail.get("errorMessage"));
+
+            if (stacktrace != null) {
+                // There may not be a stacktrace if the script didn't start
+                // executing.
+                sb.append("\nScript error stacktrace:");
+                for (Map<String, Object> elem : stacktrace) {
+                    sb.append("\n  ");
+                    sb.append(elem.get("function"));
+                    sb.append(":");
+                    sb.append(elem.get("lineNumber"));
+                }
+            }
+            sb.append("\n");
+            return sb.toString();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            mOutputText.setText("");
+            mProgress.show();
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
+        protected void onPostExecute(List<String> output) {
+            mProgress.hide();
+            if (output == null || output.size() == 0) {
+                mOutputText.setText("No results returned.");
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                output.add(0, "Data retrieved using the Google Apps Script Execution API:");
+                mOutputText.setText(TextUtils.join("\n", output));
             }
         }
 
         @Override
         protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+            mProgress.hide();
+            if (mLastError != null) {
+                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                    showGooglePlayServicesAvailabilityErrorDialog(
+                            ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                    .getConnectionStatusCode());
+                } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(
+                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                            MainActivity.REQUEST_AUTHORIZATION);
+                } else {
+                    mOutputText.setText("The following error occurred:\n"
+                            + mLastError.getMessage());
+                }
+            } else {
+                mOutputText.setText("Request cancelled.");
+            }
         }
     }
 }

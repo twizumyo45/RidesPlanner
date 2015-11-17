@@ -50,6 +50,7 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
 
         // Populate the data into the template view using the data object
         driverName.setText(rideGroup.driver.toString());
+        driverName.setOnClickListener(new OnClickPersonListener(viewRidesActivity_, rideGroup.driver));
         driverName.setTypeface(rideGroup.driver.getTypeface());
 
         // further populate the rest of the TextViews in this LinearLayout

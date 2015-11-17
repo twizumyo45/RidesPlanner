@@ -19,27 +19,27 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.csm117.ridesplanner.ViewRides"
+            android:name="com.csm117.ridesplanner.ViewRidesActivity"
             android:label="@string/title_activity_view_rides"
             android:theme="@style/AppTheme.NoActionBar" >
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
         <activity
-            android:name="com.csm117.ridesplanner.ViewPersonsList"
+            android:name="com.csm117.ridesplanner.ViewPersonsListActivity"
             android:label="@string/title_activity_view_persons_list"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
 	<activity
             android:name=".MainActivity"
             android:label="Google Apps Script Execution API Android Quickstart" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <meta-data

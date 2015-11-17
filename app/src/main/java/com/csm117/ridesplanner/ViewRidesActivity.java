@@ -9,6 +9,9 @@ import android.widget.GridView;
 
 import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.R;
+import com.csm117.ridesplanner.onClickListeners.DeleteRidersFabListener;
+import com.csm117.ridesplanner.onClickListeners.MoveRiderFabListener;
+import com.csm117.ridesplanner.onClickListeners.SwapRidersFabListener;
 import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Rider;
@@ -19,9 +22,9 @@ import java.util.List;
 public class ViewRidesActivity extends ViewNavigation {
     //TODO: make getters and setters instead of public
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
-    private List<RideGroup> rideGroups_ = new ArrayList<RideGroup>();
-    private List<List<Person>> riders_ = new ArrayList<List<Person>>();
-    private ArrayAdapter<RideGroup> adapter_;
+    public List<RideGroup> rideGroups_ = new ArrayList<RideGroup>();
+    public List<List<Person>> riders_ = new ArrayList<List<Person>>();
+    public ArrayAdapter<RideGroup> adapter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,68 +50,31 @@ public class ViewRidesActivity extends ViewNavigation {
 
         //TODO: lol clean dis up
         FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
-        fabDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (selectedPersons_.size() == 1) {
-                    Snackbar.make(view, "Deleting selected rider!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    for (RideGroup rg : rideGroups_) {
-                        rg.remove(selectedPersons_.get(0));
-                    }
-                    adapter_.notifyDataSetChanged();
-                    selectedPersons_.clear();
-                }
-            }
-        });
+        fabDelete.setOnClickListener(new DeleteRidersFabListener(this));
 
         FloatingActionButton fabSwap = (FloatingActionButton) findViewById(R.id.fabSwap);
-        fabSwap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //check the correct number of ppl to be swapped are selected (2 ppl)
-                if (selectedPersons_.size() == 2) {
-                    //check that the ppl are in different groups
-                    boolean inDiffGroups = true;
-                    for (RideGroup rg: rideGroups_){
-                        if (rg.contains(selectedPersons_.get(0)) && rg.contains(selectedPersons_.get(1)))
-                            inDiffGroups = false;
-                    }
+        fabSwap.setOnClickListener(new SwapRidersFabListener(this));
 
-                    if (inDiffGroups) {
-                        for (RideGroup rg : rideGroups_) {
-                            if (rg.remove(selectedPersons_.get(0))) {
-                                rg.add(selectedPersons_.get(1));
-                            } else if (rg.remove(selectedPersons_.get(1))) {
-                                rg.add(selectedPersons_.get(0));
-                            }
-                        }
-                    }
-                    else{
-                        for (RideGroup rg : rideGroups_) {
-                            if (rg.contains(selectedPersons_.get(0)) && rg.contains(selectedPersons_.get(0))){
-                                rg.remove(selectedPersons_.get(0));
-                                rg.remove(selectedPersons_.get(1));
-                                rg.add(selectedPersons_.get(0));
-                                rg.add(selectedPersons_.get(1));
-                            }
-                        }
-                    }
-                    adapter_.notifyDataSetChanged();
-                    Snackbar.make(view, "Swapping selected riders!", Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null).show();
-                    selectedPersons_.clear();
-                }
-            }
-        });
+        FloatingActionButton fabMoveRider = (FloatingActionButton) findViewById(R.id.fabMoveRider);
+        fabMoveRider.setOnClickListener(new MoveRiderFabListener(this));
     }
     public void updateButtonVisibility(){
+        //get floating action buttons
         FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
         FloatingActionButton fabSwap = (FloatingActionButton) findViewById(R.id.fabSwap);
+        FloatingActionButton fabMoveRider = (FloatingActionButton) findViewById(R.id.fabMoveRider);
+
+        //set all as invisible
         fabDelete.setVisibility(View.INVISIBLE);
         fabSwap.setVisibility(View.INVISIBLE);
-        if(selectedPersons_.size() == 1){
+        fabMoveRider.setVisibility(View.INVISIBLE);
+
+        //set the correct fab as visible if necessary
+        if(selectedPersons_.size() == 1 && !RideGroup.checkContainsDriver(selectedPersons_)){ //there is only one person selected and it's a rider
             fabDelete.setVisibility(View.VISIBLE);
+        }
+        else if (selectedPersons_.size() == 2 && RideGroup.checkContainsDriver(selectedPersons_)){ //there are two ppl selected and
+            fabMoveRider.setVisibility(View.VISIBLE);
         }
         else if (selectedPersons_.size() == 2){
             fabSwap.setVisibility(View.VISIBLE);

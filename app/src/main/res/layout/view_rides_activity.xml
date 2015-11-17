@@ -42,4 +42,13 @@
         android:visibility="invisible"
         android:src="@android:drawable/ic_popup_sync"/>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabMoveRider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="invisible"
+        android:src="@android:drawable/ic_menu_directions"/>
+
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,15 @@
 package com.csm117.ridesplanner.entities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.csm117.ridesplanner.communication.MakeRequestTask;
+import com.csm117.ridesplanner.communication.OnTaskCompleted;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,8 +31,17 @@ public class Sheet {
         return unsentPersons_;
     }
 
-    public static void sync(){
-        //TODO: sync with sheets
+    public static void sync(GoogleAccountCredential mCredential){
+
+        class MyCallback implements OnTaskCompleted{
+            public void onTaskCompleted(Object output){
+                //do your stuff with the result stuff
+            }
+        }
+
+        List<Object> objectList = new ArrayList<Object>();
+        MyCallback cb = new MyCallback();
+        new MakeRequestTask(mCredential, "getData", objectList, cb).execute(); //get mCredential
         //right now just fills with dummy data
         rideGroups_.clear();
         unsentPersons_.clear();

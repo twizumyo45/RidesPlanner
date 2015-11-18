@@ -52,7 +52,7 @@ import com.csm117.ridesplanner.R;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends ViewNavigation {
+public class LoginActivity extends AppCompatActivity {
 
     GoogleAccountCredential mCredential;
     private TextView mOutputText;
@@ -69,7 +69,6 @@ public class LoginActivity extends ViewNavigation {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        super.setUpNav();
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Calling Google Apps Script Execution API ...");
         // Initialize credentials and service object.
@@ -168,9 +167,12 @@ public class LoginActivity extends ViewNavigation {
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mSignedInAs.setText(accountName);
+                        //REDIRECT
+                        Intent nextScreen = new Intent(getApplicationContext(),  ViewRidesActivity.class);
+                        startActivity(nextScreen);
                     }
                 } else if (resultCode == RESULT_CANCELED) {
-                    mOutputText.setText("Account unspecified.");
+                    //mOutputText.setText("Account unspecified.");
                     mSignedInAs.setText("n/a");
                 }
                 break;
@@ -196,7 +198,7 @@ public class LoginActivity extends ViewNavigation {
             if (isDeviceOnline()) {
                 new MakeRequestTask(mCredential).execute();
             } else {
-                mOutputText.setText("No network connection available.");
+                //mOutputText.setText("No network connection available.");
             }
         }
     }
@@ -376,7 +378,7 @@ public class LoginActivity extends ViewNavigation {
 
         @Override
         protected void onPreExecute() {
-            mOutputText.setText("");
+            //mOutputText.setText("");
             mProgress.show();
         }
 
@@ -384,10 +386,10 @@ public class LoginActivity extends ViewNavigation {
         protected void onPostExecute(List<String> output) {
             mProgress.hide();
             if (output == null || output.size() == 0) {
-                mOutputText.setText("No results returned.");
+                //mOutputText.setText("No results returned.");
             } else {
                 output.add(0, "Data retrieved using the Google Apps Script Execution API:");
-                mOutputText.setText(TextUtils.join("\n", output));
+                //mOutputText.setText(TextUtils.join("\n", output));
             }
         }
 
@@ -404,11 +406,11 @@ public class LoginActivity extends ViewNavigation {
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             MainActivity.REQUEST_AUTHORIZATION);
                 } else {
-                    mOutputText.setText("The following error occurred:\n"
-                            + mLastError.getMessage());
+                    //mOutputText.setText("The following error occurred:\n"
+                            //+ mLastError.getMessage());
                 }
             } else {
-                mOutputText.setText("Request cancelled.");
+                //mOutputText.setText("Request cancelled.");
             }
         }
     }

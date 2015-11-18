@@ -1,6 +1,7 @@
 package com.csm117.ridesplanner.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +25,8 @@ public class Sheet {
     public static void sync(){
         //TODO: sync with sheets
         //right now just fills with dummy data
+        rideGroups_.clear();
+        unsentPersons_.clear();
 
         List<List<Person>> riders = new ArrayList<List<Person>>();
         for (int k = 0; k < 5; k++) {
@@ -43,5 +46,11 @@ public class Sheet {
         for (int k = 0; k < 20; k++) {
             unsentPersons_.add(new Rider("rider"+k));
         }
+        sortNames();
+    }
+
+    public static void sortNames(){
+        for (RideGroup rg: rideGroups_)
+            Collections.sort(rg.riders);
     }
 }

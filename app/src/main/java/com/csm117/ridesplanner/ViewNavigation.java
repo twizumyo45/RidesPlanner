@@ -42,6 +42,9 @@ public abstract class ViewNavigation extends AppCompatActivity implements Naviga
         } else if (id == R.id.nav_view_persons_list) {
             Intent nextScreen = new Intent(getApplicationContext(),  ViewPersonsListActivity.class);
             startActivity(nextScreen);
+        } else if (id == R.id.nav_login) {
+            Intent nextScreen = new Intent(getApplicationContext(),  LoginActivity.class);
+            startActivity(nextScreen);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

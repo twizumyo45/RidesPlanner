@@ -71,9 +71,5 @@ public class ViewRidesActivity extends ViewNavigation {
             fabSwap.setVisibility(View.VISIBLE);
         }
     }
-    public void clearSelections(){
-        findViewById(R.id.driverName);
-        findViewById(R.id.riders);
-    }
 
 }

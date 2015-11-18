@@ -45,13 +45,15 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
         }
 
         // Lookup view for data population
-        TextView driverName =
+        TextView driverTextView =
                 (TextView) convertView.findViewById(R.id.driverName);
 
         // Populate the data into the template view using the data object
-        driverName.setText(rideGroup.driver.toString());
-        driverName.setOnClickListener(new OnClickPersonListener(viewRidesActivity_, rideGroup.driver));
-        driverName.setTypeface(rideGroup.driver.getTypeface());
+        driverTextView.setText(rideGroup.driver.toString());
+        driverTextView.setOnClickListener(new OnClickPersonListener(viewRidesActivity_, rideGroup.driver));
+        driverTextView.setTypeface(rideGroup.driver.getTypeface());
+        //give driver a reference to it's textview
+        rideGroup.driver.setRideGroupView(driverTextView);
 
         // further populate the rest of the TextViews in this LinearLayout
         List<Person> riderNames = rideGroup.riders;
@@ -67,6 +69,7 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
             riderTextView.setOnClickListener(onClickPersonListener);
             riderTextView.setText(rider.toString());
             riders.addView(riderTextView);
+            rider.setRideGroupView(riderTextView);
         }
         // Return the completed view to render on screen
         return convertView;

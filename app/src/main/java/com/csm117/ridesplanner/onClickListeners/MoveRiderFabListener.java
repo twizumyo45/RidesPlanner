@@ -1,11 +1,13 @@
 package com.csm117.ridesplanner.onClickListeners;
 
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.csm117.ridesplanner.ViewRidesActivity;
 import com.csm117.ridesplanner.entities.RideGroup;
+import com.csm117.ridesplanner.entities.Sheet;
 
 /**
  * Created by Roger on 11/15/2015.
@@ -25,9 +27,11 @@ public class MoveRiderFabListener implements View.OnClickListener {
                     .setAction("Action", null).show();
 
             RideGroup.moveRider(viewRidesActivity_.selectedPersons_, viewRidesActivity_.rideGroups_);
+
             viewRidesActivity_.adapter_.notifyDataSetChanged();
             viewRidesActivity_.selectedPersons_.clear();
             viewRidesActivity_.updateButtonVisibility();
+            Sheet.sortNames();
         }
     }
 }

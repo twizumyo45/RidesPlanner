@@ -1,5 +1,6 @@
 package com.csm117.ridesplanner.entities;
 
+import android.graphics.Color;
 import android.util.Log;
 
 import com.csm117.ridesplanner.entities.Person;
@@ -83,6 +84,7 @@ public class RideGroup {
     public static boolean moveRider(ArrayList<Person> personsList, List<RideGroup> rideGroups){
         Person driver = getDriver(personsList);
         Person rider = getRider(personsList);
+        driver.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
 
         if (driver == null || rider == null)
             return false;

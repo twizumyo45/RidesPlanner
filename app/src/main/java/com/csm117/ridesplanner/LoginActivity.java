@@ -32,6 +32,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -73,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         mProgress = new ProgressDialog(this);
-        mProgress.setMessage("Calling Google Apps Script Execution API ...");
+        mProgress.setMessage("Signed in as: ");
         // Initialize credentials and service object.
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         mCredential = GoogleAccountCredential.usingOAuth2(
@@ -82,13 +83,15 @@ public class LoginActivity extends AppCompatActivity {
                 .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
 
         mSignedInAs = (TextView) this.findViewById(R.id.signed_in_as);
-
+        if (mCredential.getSelectedAccountName() != null) {
+            mSignedInAs.setText(mCredential.getSelectedAccountName());
+        }
         Button signIn = (Button) this.findViewById(R.id.sign_in_button);
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isGooglePlayServicesAvailable()) {
-                    chooseAccount();
+                    refreshResults();
                 } else {
                     Snackbar.make(view, "Google Play Services required: " +
                             "after installing, close and relaunch this app.",
@@ -129,12 +132,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isGooglePlayServicesAvailable()) {
-            refreshResults();
-        } else {
-            mOutputText.setText("Google Play Services required: " +
-                    "after installing, close and relaunch this app.");
-        }
+        // if (isGooglePlayServicesAvailable()) {
+        //     refreshResults();
+        // } else {
+        //     mOutputText.setText("Google Play Services required: " +
+        //             "after installing, close and relaunch this app.");
+        // }
     }
 
     /**
@@ -170,6 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mSignedInAs.setText(accountName);
+                        mProgress.setMessage("Signed in as: " + accountName);
 
                     }
                 } else if (resultCode == RESULT_CANCELED) {
@@ -196,6 +200,8 @@ public class LoginActivity extends AppCompatActivity {
         if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
         } else {
+            mProgress.setMessage("Signed in as: " +
+                    mCredential.getSelectedAccountName());
             if (isDeviceOnline()) {
                 new MakeRequestTask(mCredential).execute();
             } else {
@@ -203,8 +209,13 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             //REDIRECT
-            Intent nextScreen = new Intent(getApplicationContext(),  ViewRidesActivity.class);
-            startActivity(nextScreen);
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    Intent nextScreen = new Intent(getApplicationContext(), ViewRidesActivity.class);
+                    startActivity(nextScreen);
+                }
+            }, 2000);
         }
     }
 

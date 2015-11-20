@@ -54,7 +54,7 @@ import com.csm117.ridesplanner.R;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    GoogleAccountCredential mCredential;
+    static public GoogleAccountCredential mCredential;
     private TextView mOutputText;
     ProgressDialog mProgress;
     private TextView mSignedInAs;
@@ -63,7 +63,10 @@ public class LoginActivity extends AppCompatActivity {
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
-    private static final String[] SCOPES = { "https://www.googleapis.com/auth/drive" };
+    private static final String[] SCOPES = {
+            "https://www.googleapis.com/auth/drive" ,
+            "https://www.googleapis.com/auth/spreadsheets"
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,12 +129,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        if (isGooglePlayServicesAvailable()) {
-//            refreshResults();
-//        } else {
-//            mOutputText.setText("Google Play Services required: " +
-//                    "after installing, close and relaunch this app.");
-//        }
+        if (isGooglePlayServicesAvailable()) {
+            refreshResults();
+        } else {
+            mOutputText.setText("Google Play Services required: " +
+                    "after installing, close and relaunch this app.");
+        }
     }
 
     /**
@@ -167,9 +170,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mSignedInAs.setText(accountName);
-                        //REDIRECT
-                        Intent nextScreen = new Intent(getApplicationContext(),  ViewRidesActivity.class);
-                        startActivity(nextScreen);
+
                     }
                 } else if (resultCode == RESULT_CANCELED) {
                     //mOutputText.setText("Account unspecified.");
@@ -200,6 +201,10 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 //mOutputText.setText("No network connection available.");
             }
+
+            //REDIRECT
+            Intent nextScreen = new Intent(getApplicationContext(),  ViewRidesActivity.class);
+            startActivity(nextScreen);
         }
     }
 

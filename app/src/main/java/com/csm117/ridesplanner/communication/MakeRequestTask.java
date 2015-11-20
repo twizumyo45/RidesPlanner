@@ -104,8 +104,9 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
 
         // Create an execution request object.
         ExecutionRequest request = new ExecutionRequest()
-                .setFunction(functionName_);
-                //.setParameters(parameterList_);
+                .setFunction(functionName_)
+                .setParameters(parameterList_)
+                .setDevMode(true);
 
         // Make the request.
         Operation op =

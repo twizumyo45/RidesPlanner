@@ -59,7 +59,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
     GoogleAccountCredential credential;
 
     public MakeRequestTask(String functionName,List<Object> parameterList, OnTaskCompleted listener) {
-        credential = new GoogleAccountCredential(null, null);
+        credential = LoginActivity.mCredential;
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         mService = new com.google.api.services.script.Script.Builder(
@@ -104,7 +104,8 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
 
         // Create an execution request object.
         ExecutionRequest request = new ExecutionRequest()
-                .setFunction(functionName_).setParameters(parameterList_);
+                .setFunction(functionName_);
+                //.setParameters(parameterList_);
 
         // Make the request.
         Operation op =

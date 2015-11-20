@@ -39,13 +39,21 @@ public class Sheet {
             public void onTaskCompleted(Object output){
                 //do your stuff with the result stuff
                 Log.d("credential", "CREDENTIALS WORKED!");
+                for (ArrayList<String> car : (ArrayList<ArrayList<String>>)
+                        output) {
+                    for(String s : car) {
+                        Log.d("tag", s);
+                    }
+                }
             }
         }
 
         List<Object> objectList = new ArrayList<Object>();
         objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
         MyCallback cb = new MyCallback();
-        new MakeRequestTask("getData", objectList, cb).execute(); //get mCredential
+        new MakeRequestTask("getData", objectList, cb).execute();
+        //get
+        // mCredential
     }
 
     public static void pushDataToOnlineSheet(){

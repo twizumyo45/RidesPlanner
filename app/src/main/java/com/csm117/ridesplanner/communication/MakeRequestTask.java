@@ -3,6 +3,7 @@ package com.csm117.ridesplanner.communication;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import com.csm117.ridesplanner.LoginActivity;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
@@ -55,8 +56,10 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
     String functionName_;
     List<Object> parameterList_;
     OnTaskCompleted listener_;
+    GoogleAccountCredential credential;
 
-    public MakeRequestTask(GoogleAccountCredential credential, String functionName,List<Object> parameterList, OnTaskCompleted listener) {
+    public MakeRequestTask(String functionName,List<Object> parameterList, OnTaskCompleted listener) {
+        credential = new GoogleAccountCredential(null, null);
         HttpTransport transport = AndroidHttp.newCompatibleTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
         mService = new com.google.api.services.script.Script.Builder(

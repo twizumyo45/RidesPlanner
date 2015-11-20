@@ -44,7 +44,6 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
         //TODO: link with real sheets
         ListView listview = (ListView) findViewById(R.id.listView);
-        Sheet.sync();
 
         ArrayAdapter<Person> adapter = new PersonsListAdapter(this, unsentPersons_);
         listview.setAdapter(adapter);

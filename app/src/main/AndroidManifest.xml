@@ -18,10 +18,10 @@
             android:name="com.csm117.ridesplanner.LoginActivity"
             android:label="@string/title_login"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name="com.csm117.ridesplanner.ViewRidesActivity"
@@ -41,7 +41,10 @@
 	    <activity
             android:name=".MainActivity"
             android:label="Google Apps Script Execution API Android Quickstart" >
-
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

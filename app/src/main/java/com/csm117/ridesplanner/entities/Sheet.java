@@ -2,6 +2,9 @@ package com.csm117.ridesplanner.entities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.csm117.ridesplanner.communication.MakeRequestTask;
 import com.csm117.ridesplanner.communication.OnTaskCompleted;
@@ -31,7 +34,36 @@ public class Sheet {
         return unsentPersons_;
     }
 
-    public static void sync(GoogleAccountCredential mCredential){
+    public static void getDataFromOnlineSheet(){
+        class MyCallback implements OnTaskCompleted{
+            public void onTaskCompleted(Object output){
+                //do your stuff with the result stuff
+                Log.d("credential", "CREDENTIALS WORKED!");
+            }
+        }
+
+        List<Object> objectList = new ArrayList<Object>();
+        objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
+        MyCallback cb = new MyCallback();
+        new MakeRequestTask("getData", objectList, cb).execute(); //get mCredential
+    }
+
+    public static void pushDataToOnlineSheet(){
+        class MyCallback implements OnTaskCompleted{
+            public void onTaskCompleted(Object output){
+                //do your stuff with the result stuff
+                Log.d("credential", "CREDENTIALS WORKED!");
+            }
+        }
+
+        List<Object> objectList = new ArrayList<Object>();
+        objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
+        MyCallback cb = new MyCallback();
+        new MakeRequestTask("getData", objectList, cb).execute(); //get mCredential
+    }
+
+    /*
+    public static void sync(){
 
         class MyCallback implements OnTaskCompleted{
             public void onTaskCompleted(Object output){
@@ -66,7 +98,7 @@ public class Sheet {
         }
         sortNames();
     }
-
+*/
     public static void sortNames(){
         for (RideGroup rg: rideGroups_)
             Collections.sort(rg.riders);

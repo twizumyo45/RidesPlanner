@@ -32,9 +32,9 @@ public class ViewRidesActivity extends ViewNavigation {
         super.setUpNav();
 
         //TODO: link with real sheets
+        Sheet.getDataFromOnlineSheet();
         GridView gridview = (GridView) findViewById(R.id.gridView);
 
-        Sheet.sync();
 
         adapter_ = new RideGroupAdapter(this, rideGroups_, this);
         gridview.setAdapter(adapter_);

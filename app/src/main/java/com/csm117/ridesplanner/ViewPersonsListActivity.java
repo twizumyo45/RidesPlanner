@@ -52,7 +52,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
 
-                // set prompts.xml to alertdialog builder
+                // set prompts.xml to alert dialog builder
                 alertDialogBuilder.setView(promptsView);
 
                 final EditText userInput = (EditText) promptsView
@@ -63,7 +63,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
                 // set dialog message
                 alertDialogBuilder
                         .setCancelable(false)
-                        .setPositiveButton("OK",
+                        .setPositiveButton("Add",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // get user input and set it to result

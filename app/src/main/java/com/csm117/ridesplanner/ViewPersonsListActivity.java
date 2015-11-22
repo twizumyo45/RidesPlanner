@@ -52,7 +52,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         context);
 
-                // set prompts.xml to alertdialog builder
+                // set prompts.xml to alert dialog builder
                 alertDialogBuilder.setView(promptsView);
 
                 final EditText userInput = (EditText) promptsView

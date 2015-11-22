@@ -9,13 +9,17 @@ import com.csm117.ridesplanner.communication.OnTaskCompleted;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Roger on 11/16/2015.
  */
 public class Sheet {
+    private static Sheet instance;
     private static List<RideGroup> rideGroups_ = new ArrayList<RideGroup>();
     private static List<Person> unsentPersons_ = new ArrayList<Person>();
+    public final static String ridesSheetName = "ridesplanner-rides";
+    private static String sheetID = "";
 
     private Sheet() {
 
@@ -27,6 +31,10 @@ public class Sheet {
 
     public static List<Person> getUnsentPersons() {
         return unsentPersons_;
+    }
+
+    public static void updateSheetID(String id) {
+        sheetID = id;
     }
 
     public static void getDataFromOnlineSheet() {
@@ -64,10 +72,11 @@ public class Sheet {
             }
         }
 
-        List<Object> objectList = new ArrayList<Object>();
-        objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
+        List<Object> parameters = new ArrayList<Object>();
+        Log.d("Sheet", "sheetID is: " + sheetID);
+        parameters.add(sheetID); // sheet id
         MyPushCallback cb = new MyPushCallback();
-        new MakeRequestTask("getData", objectList, cb).execute();
+        new MakeRequestTask("getData", parameters, cb).execute();
     }
 
     public static void pushDataToOnlineSheet(){
@@ -78,8 +87,8 @@ public class Sheet {
             }
         }
 
-        List<Object> objectList = new ArrayList<Object>();
-        objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
+        List<Object> parameters = new ArrayList<Object>();
+        parameters.add(sheetID); // sheet id
 
         //translates our local data (arraylists of ridegroups/persons) into
         //arraylist of strings (format required by sheets)
@@ -108,10 +117,10 @@ public class Sheet {
             newSheet.add(row);
         }
 
-        objectList.add(newSheet);
+        parameters.add(newSheet);
 
         MyPullCallback cb = new MyPullCallback();
-        new MakeRequestTask("refillData", objectList, cb).execute(); //get mCredential
+        new MakeRequestTask("refillData", parameters, cb).execute(); //get mCredential
     }
 
     public static void sortNames(){

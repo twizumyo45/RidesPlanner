@@ -1,5 +1,6 @@
 package com.csm117.ridesplanner;
 
+import com.csm117.ridesplanner.entities.Sheet;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -197,7 +199,8 @@ public class LoginActivity extends AppCompatActivity {
             chooseAccount();
         } else {
             mProgress.setMessage("Signed in as: " +
-                    mCredential.getSelectedAccountName());
+                    mCredential.getSelectedAccountName() + "\nGetting Sheet " +
+                    "Data");
             if (isDeviceOnline()) {
                 new MakeRequestTask(mCredential).execute();
             } else {
@@ -208,8 +211,7 @@ public class LoginActivity extends AppCompatActivity {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 public void run() {
-                    Intent nextScreen = new Intent(getApplicationContext(), ViewRidesActivity.class);
-                    startActivity(nextScreen);
+
                 }
             }, 2000);
         }
@@ -273,7 +275,7 @@ public class LoginActivity extends AppCompatActivity {
      * An asynchronous task that handles the Google Apps Script Execution API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+    private class MakeRequestTask extends AsyncTask<Void, Void, String> {
         private com.google.api.services.script.Script mService = null;
         private Exception mLastError = null;
 
@@ -291,9 +293,9 @@ public class LoginActivity extends AppCompatActivity {
          * @param params no parameters needed for this task.
          */
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
-                return getDataFromApi();
+                return getSheetID();
             } catch (Exception e) {
                 mLastError = e;
                 cancel(true);
@@ -308,17 +310,18 @@ public class LoginActivity extends AppCompatActivity {
          * @return list of String folder names and their IDs
          * @throws IOException
          */
-        private List<String> getDataFromApi()
+        private String getSheetID()
                 throws IOException, GoogleAuthException {
             // ID of the script to call. Acquire this from the Apps Script editor,
             // under Publish > Deploy as API executable.
             String scriptId = "MkPlmM8tc25HedhUPYY-U7sw9KAQap61g";
-
-            List<String> folderList = new ArrayList<String>();
-
+            String sheetID = "";
+            List<Object> parameters = new ArrayList<>();
+            parameters.add(Sheet.ridesSheetName);
             // Create an execution request object.
             ExecutionRequest request = new ExecutionRequest()
-                    .setFunction("getFoldersUnderRoot");
+                    .setFunction("getOrCreateRidesSheetID")
+                    .setParameters(parameters);
 
             // Make the request.
             Operation op =
@@ -335,16 +338,9 @@ public class LoginActivity extends AppCompatActivity {
                 // function returns. Here, the function returns an Apps
                 // Script Object with String keys and values, so must be
                 // cast into a Java Map (folderSet).
-                Map<String, String> folderSet =
-                        (Map<String, String>)(op.getResponse().get("result"));
-
-                for (String id: folderSet.keySet()) {
-                    folderList.add(
-                            String.format("%s (%s)", folderSet.get(id), id));
-                }
+                sheetID = (String) (op.getResponse().get("result"));
             }
-
-            return folderList;
+            return sheetID;
         }
 
         /**
@@ -395,13 +391,15 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<String> output) {
+        protected void onPostExecute(String output) {
             mProgress.hide();
-            if (output == null || output.size() == 0) {
-                //mOutputText.setText("No results returned.");
+            if (output == null || output.isEmpty()) {
+                Log.e("Sheet", "Unable to grab/create sheetID!");
             } else {
-                output.add(0, "Data retrieved using the Google Apps Script Execution API:");
-                //mOutputText.setText(TextUtils.join("\n", output));
+                Sheet.updateSheetID(output);
+                // Redirect to new intent
+                Intent nextScreen = new Intent(getApplicationContext(), ViewRidesActivity.class);
+                startActivity(nextScreen);
             }
         }
 

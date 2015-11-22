@@ -1,14 +1,11 @@
 package com.csm117.ridesplanner.communication;
 
 import android.os.AsyncTask;
-import android.text.TextUtils;
 
 import com.csm117.ridesplanner.LoginActivity;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GooglePlayServicesAvailabilityIOException;
-import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -21,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Created by Roger on 11/17/2015.
@@ -120,21 +116,9 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
                 op.getResponse().get("result") != null) {
             // The result provided by the API needs to be cast into
             // the correct type, based upon what types the Apps Script
-            // function returns. Here, the function returns an Apps
-            // Script Object with String keys and values, so must be
-            // cast into a Java Map (folderSet).
-//            return op.getResponse().get("result");
+            // function returns.
             return op.getResponse().get("result");
-//            Map<String, String> folderSet =
-//                    (Map<String, String>)(op.getResponse().get("result"));
-//
-//            for (String id: folderSet.keySet()) {
-//                folderList.add(
-//                        String.format("%s (%s)", folderSet.get(id), id));
-//            }
         }
-
-//        return folderList;
         return null;
     }
 
@@ -181,40 +165,15 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
 
     @Override
     protected void onPreExecute() {
-//        mOutputText.setText("");
-//        mProgress.show();
     }
 
 //    @Override
     protected void onPostExecute(Object output) {
         listener_.onTaskCompleted(output);
-//        mProgress.hide();
-//        if (output == null || output.size() == 0) {
-//            mOutputText.setText("No results returned.");
-//        } else {
-//            output.add(0, "Data retrieved using the Google Apps Script Execution API:");
-//            mOutputText.setText(TextUtils.join("\n", output));
-//        }
     }
 
     @Override
     protected void onCancelled() {
-//        mProgress.hide();
-//        if (mLastError != null) {
-//            if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-//                showGooglePlayServicesAvailabilityErrorDialog(
-//                        ((GooglePlayServicesAvailabilityIOException) mLastError)
-//                                .getConnectionStatusCode());
-//            } else if (mLastError instanceof UserRecoverableAuthIOException) {
-//                startActivityForResult(
-//                        ((UserRecoverableAuthIOException) mLastError).getIntent(),
-//                        MainActivity.REQUEST_AUTHORIZATION);
-//            } else {
-//                mOutputText.setText("The following error occurred:\n"
-//                        + mLastError.getMessage());
-//            }
-//        } else {
-//            mOutputText.setText("Request cancelled.");
-//        }
+
     }
 }

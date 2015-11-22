@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mOutputText;
     ProgressDialog mProgress;
     private TextView mSignedInAs;
+    private Button mSignInButton;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -83,11 +84,13 @@ public class LoginActivity extends AppCompatActivity {
                 .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
 
         mSignedInAs = (TextView) this.findViewById(R.id.signed_in_as);
+        mSignInButton = (Button) this.findViewById(R.id.sign_in_button);
         if (mCredential.getSelectedAccountName() != null) {
             mSignedInAs.setText(mCredential.getSelectedAccountName());
+            mSignInButton.setText("Verify app permissions");
         }
-        Button signIn = (Button) this.findViewById(R.id.sign_in_button);
-        signIn.setOnClickListener(new View.OnClickListener() {
+
+        mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isGooglePlayServicesAvailable()) {
@@ -174,6 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.apply();
                         mSignedInAs.setText(accountName);
                         mProgress.setMessage("Signed in as: " + accountName);
+                        mSignInButton.setText("Verify app permissions");
 
                     }
                 } else if (resultCode == RESULT_CANCELED) {

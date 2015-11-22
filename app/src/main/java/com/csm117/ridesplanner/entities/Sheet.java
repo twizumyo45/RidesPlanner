@@ -1,18 +1,12 @@
 package com.csm117.ridesplanner.entities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.csm117.ridesplanner.ViewRidesActivity;
 import com.csm117.ridesplanner.communication.MakeRequestTask;
 import com.csm117.ridesplanner.communication.OnTaskCompleted;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.util.ExponentialBackOff;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,10 +30,10 @@ public class Sheet {
     }
 
     public static void getDataFromOnlineSheet() {
-        class MyCallback implements OnTaskCompleted {
+        class MyPushCallback implements OnTaskCompleted {
             public void onTaskCompleted(Object output) {
                 //do your stuff with the result stuff
-                Log.d("credential", "CREDENTIALS WORKED!");
+                Log.d("Google Scripts", "PUSH WORKED!");
                 rideGroups_.clear();
                 unsentPersons_.clear();
 
@@ -64,66 +58,32 @@ public class Sheet {
                     unsentPersons_.add(new Rider("rider" + k));
                 }
                 sortNames();
+                if (ViewRidesActivity.adapter_ != null)
+                    ViewRidesActivity.adapter_.notifyDataSetChanged();
+                //TODO: update view persons list adapter
             }
         }
 
         List<Object> objectList = new ArrayList<Object>();
         objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
-        MyCallback cb = new MyCallback();
+        MyPushCallback cb = new MyPushCallback();
         new MakeRequestTask("getData", objectList, cb).execute();
     }
 
     public static void pushDataToOnlineSheet(){
-        class MyCallback implements OnTaskCompleted{
+        class MyPullCallback implements OnTaskCompleted{
             public void onTaskCompleted(Object output){
                 //do your stuff with the result stuff
-                Log.d("credential", "CREDENTIALS WORKED!");
+                Log.d("Google Scripts", "PUSH WORKED!");
             }
         }
 
         List<Object> objectList = new ArrayList<Object>();
         objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
-        MyCallback cb = new MyCallback();
+        MyPullCallback cb = new MyPullCallback();
         new MakeRequestTask("getData", objectList, cb).execute(); //get mCredential
     }
 
-    /*
-    public static void sync(){
-
-        class MyCallback implements OnTaskCompleted{
-            public void onTaskCompleted(Object output){
-                //do your stuff with the result stuff
-            }
-        }
-
-        List<Object> objectList = new ArrayList<Object>();
-        MyCallback cb = new MyCallback();
-        new MakeRequestTask(mCredential, "getData", objectList, cb).execute(); //get mCredential
-        //right now just fills with dummy data
-        rideGroups_.clear();
-        unsentPersons_.clear();
-
-        List<List<Person>> riders = new ArrayList<List<Person>>();
-        for (int k = 0; k < 5; k++) {
-            riders.add(new ArrayList<Person>());
-            for (int i = 0; i < 4; i++) {
-                riders.get(k).add(new Rider("rider" + (k * 4 + i)));
-            }
-        }
-        for (int i = 0; i < 5; i++) {
-            Person driver = new Driver("driver" + i);
-            rideGroups_.add(new RideGroup(driver, riders.get(i)));
-        }
-
-        for (int k = 0; k < 5; k++) {
-            unsentPersons_.add(new Driver("driver"+k));
-        }
-        for (int k = 0; k < 20; k++) {
-            unsentPersons_.add(new Rider("rider"+k));
-        }
-        sortNames();
-    }
-*/
     public static void sortNames(){
         for (RideGroup rg: rideGroups_)
             Collections.sort(rg.riders);

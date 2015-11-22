@@ -22,7 +22,7 @@ public class ViewRidesActivity extends ViewNavigation {
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
     public List<RideGroup> rideGroups_ = Sheet.getRideGroups();
     public List<List<Person>> riders_ = new ArrayList<List<Person>>();
-    public ArrayAdapter<RideGroup> adapter_;
+    public static ArrayAdapter<RideGroup> adapter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

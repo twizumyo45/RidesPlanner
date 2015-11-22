@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.csm117.ridesplanner.ViewRidesActivity;
 import com.csm117.ridesplanner.entities.RideGroup;
+import com.csm117.ridesplanner.entities.Sheet;
 
 /**
  * Created by Roger on 11/15/2015.
@@ -28,6 +29,7 @@ public class DeleteRidersFabListener implements View.OnClickListener {
             viewRidesActivity_.adapter_.notifyDataSetChanged();
             viewRidesActivity_.selectedPersons_.clear();
             viewRidesActivity_.updateButtonVisibility();
+            Sheet.pushDataToOnlineSheet();
         }
     }
 }

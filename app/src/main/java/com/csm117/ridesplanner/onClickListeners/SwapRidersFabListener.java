@@ -50,6 +50,7 @@ public class SwapRidersFabListener implements View.OnClickListener {
             viewRidesActivity_.selectedPersons_.clear();
             viewRidesActivity_.updateButtonVisibility();
             Sheet.sortNames();
+            Sheet.pushDataToOnlineSheet();
         }
     }
 }

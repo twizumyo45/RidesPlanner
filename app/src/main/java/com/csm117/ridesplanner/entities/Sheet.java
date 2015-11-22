@@ -33,7 +33,7 @@ public class Sheet {
         class MyPushCallback implements OnTaskCompleted {
             public void onTaskCompleted(Object output) {
                 //do your stuff with the result stuff
-                Log.d("Google Scripts", "PUSH WORKED!");
+                Log.d("Google Scripts", "PULL WORKED!");
                 rideGroups_.clear();
                 unsentPersons_.clear();
 
@@ -42,9 +42,9 @@ public class Sheet {
                     List<Person> riders = new ArrayList<Person>();
                     Person driver = null;
                     for (int i = 0; i < car.size(); i++) {
-                        if (i == 0)
+                        if (i == 0) //first name should be the driver
                             driver = new Driver(car.get(i));
-                        else
+                        else if (!car.get(i).equals("")) //add the rides if the name is not empty
                             riders.add(new Rider(car.get(i)));
                     }
                     rideGroups_.add(new RideGroup(driver, riders));
@@ -73,15 +73,45 @@ public class Sheet {
     public static void pushDataToOnlineSheet(){
         class MyPullCallback implements OnTaskCompleted{
             public void onTaskCompleted(Object output){
-                //do your stuff with the result stuff
+                //do your stuff
                 Log.d("Google Scripts", "PUSH WORKED!");
             }
         }
 
         List<Object> objectList = new ArrayList<Object>();
         objectList.add("1p8IvZm5UWtO6wY8LO8nmhYoUImyc1wgqilGr9ictZkc"); // sheet id
+
+        //translates our local data (arraylists of ridegroups/persons) into
+        //arraylist of strings (format required by sheets)
+        ArrayList<ArrayList<String>> newSheet = new ArrayList<ArrayList<String>>();
+
+        //note: 2d array must be perfect rectangle; no jagged edges
+        //therefore, must write in empty spaces if we run out of ppl
+        //find max length car
+        int maxRiderLen = 0;
+        for (RideGroup rg: rideGroups_){
+            if (rg.riders.size() > maxRiderLen)
+                maxRiderLen = rg.riders.size();
+        }
+
+        for (RideGroup rg: rideGroups_){
+            ArrayList<String> row = new ArrayList<String>();
+            row.add(rg.driver.toString());
+
+            for (int i = 0; i < maxRiderLen; i++) {
+                if (i < rg.riders.size())
+                    row.add(rg.riders.get(i).toString());
+                else
+                    row.add("");
+            }
+
+            newSheet.add(row);
+        }
+
+        objectList.add(newSheet);
+
         MyPullCallback cb = new MyPullCallback();
-        new MakeRequestTask("getData", objectList, cb).execute(); //get mCredential
+        new MakeRequestTask("refillData", objectList, cb).execute(); //get mCredential
     }
 
     public static void sortNames(){

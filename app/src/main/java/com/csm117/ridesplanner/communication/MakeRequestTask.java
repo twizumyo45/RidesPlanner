@@ -2,6 +2,7 @@ package com.csm117.ridesplanner.communication;
 
 import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.csm117.ridesplanner.LoginActivity;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -82,6 +83,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
             return getDataFromApi();
         } catch (Exception e) {
             mLastError = e;
+            Log.d("Google Scripts", "SCRIPTS FAILED: " + e.getMessage());
             cancel(true);
             return null;
         }

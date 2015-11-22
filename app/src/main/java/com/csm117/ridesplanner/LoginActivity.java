@@ -56,7 +56,9 @@ public class LoginActivity extends AppCompatActivity {
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {
-            "https://www.googleapis.com/auth/drive" ,
+            "https://www.googleapis.com/auth/drive",
+            "https://www.googleapis.com/auth/drive.apps.readonly",
+            "https://www.googleapis.com/auth/script.storage",
             "https://www.googleapis.com/auth/spreadsheets"
     };
 

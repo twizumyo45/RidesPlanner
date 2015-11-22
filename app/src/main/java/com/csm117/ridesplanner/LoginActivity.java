@@ -1,6 +1,5 @@
 package com.csm117.ridesplanner;
 
-import com.csm117.ridesplanner.onClickListeners.OnClickPersonListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -14,15 +13,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.ExponentialBackOff;
 
-
-
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.api.services.script.model.*;
 import java.util.Map;
 
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,19 +30,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.csm117.ridesplanner.R;
 
 
 /**
@@ -66,7 +56,9 @@ public class LoginActivity extends AppCompatActivity {
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
     private static final String PREF_ACCOUNT_NAME = "accountName";
     private static final String[] SCOPES = {
-            "https://www.googleapis.com/auth/drive" ,
+            "https://www.googleapis.com/auth/drive",
+            "https://www.googleapis.com/auth/drive.apps.readonly",
+            "https://www.googleapis.com/auth/script.storage",
             "https://www.googleapis.com/auth/spreadsheets"
     };
 
@@ -424,7 +416,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (mLastError instanceof UserRecoverableAuthIOException) {
                     startActivityForResult(
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            MainActivity.REQUEST_AUTHORIZATION);
+                            LoginActivity.REQUEST_AUTHORIZATION);
                 } else {
                     //mOutputText.setText("The following error occurred:\n"
                             //+ mLastError.getMessage());

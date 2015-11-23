@@ -77,6 +77,16 @@ public class RideGroup {
         return null;
     }
 
+    //returns the ride group the given driver is in
+    //if driver DNE, then return null
+    public static RideGroup getRideGroupByDriver(Person driver, List<RideGroup> rideGroups){
+        for(RideGroup rg: rideGroups){
+            if (rg.driver == driver)
+                return rg;
+        }
+        return null;
+    }
+
     //input: list of persons
     //precondition: list of persons must contain exactly one rider and
         //exactly one driver

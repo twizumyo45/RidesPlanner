@@ -1,6 +1,11 @@
 package com.csm117.ridesplanner.onClickListeners;
 
+import android.support.design.widget.Snackbar;
 import android.view.View;
+
+import com.csm117.ridesplanner.ViewRidesActivity;
+import com.csm117.ridesplanner.entities.Person;
+import com.csm117.ridesplanner.entities.RideGroup;
 
 /**
  * Created by Roger on 11/21/2015.
@@ -9,7 +14,24 @@ import android.view.View;
     //then the sendcar button appears
     //sending a car grays out everyone in the car
 public class SendCarFabListener implements View.OnClickListener{
-    public void onClick(View view) {
+    ViewRidesActivity viewRidesActivity_;
 
+    public SendCarFabListener(ViewRidesActivity vra){
+        viewRidesActivity_ = vra;
+    }
+
+    public void onClick(View view) {
+        if (viewRidesActivity_.selectedPersons_.size() == 1 && RideGroup.checkContainsDriver(viewRidesActivity_.selectedPersons_)){
+            Person driver = viewRidesActivity_.selectedPersons_.get(0);
+            RideGroup rideGroup = RideGroup.getRideGroupByDriver(driver, viewRidesActivity_.rideGroups_);
+            driver.getRideGroupView().setVisibility(View.INVISIBLE);
+            for (Person p: rideGroup.riders)
+                p.getRideGroupView().setVisibility(View.INVISIBLE);
+
+            Snackbar.make(view, "Highlighting people to indicate car has been sent", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+            viewRidesActivity_.selectedPersons_.clear();
+            viewRidesActivity_.updateButtonVisibility();
+        }
     }
 }

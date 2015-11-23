@@ -11,6 +11,7 @@ import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.DeleteRidersFabListener;
 import com.csm117.ridesplanner.onClickListeners.MoveRiderFabListener;
+import com.csm117.ridesplanner.onClickListeners.SendCarFabListener;
 import com.csm117.ridesplanner.onClickListeners.SwapRidersFabListener;
 import com.csm117.ridesplanner.entities.Person;
 
@@ -39,7 +40,7 @@ public class ViewRidesActivity extends ViewNavigation {
         adapter_ = new RideGroupAdapter(this, rideGroups_, this);
         gridview.setAdapter(adapter_);
 
-        //TODO: lol clean dis up
+        //hook up listeners to buttons
         FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
         fabDelete.setOnClickListener(new DeleteRidersFabListener(this));
 
@@ -48,21 +49,29 @@ public class ViewRidesActivity extends ViewNavigation {
 
         FloatingActionButton fabMoveRider = (FloatingActionButton) findViewById(R.id.fabMoveRider);
         fabMoveRider.setOnClickListener(new MoveRiderFabListener(this));
+
+        FloatingActionButton fabSendCar = (FloatingActionButton) findViewById(R.id.fabSendCar);
+        fabSendCar.setOnClickListener(new SendCarFabListener(this));
     }
     public void updateButtonVisibility(){
         //get floating action buttons
         FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);
         FloatingActionButton fabSwap = (FloatingActionButton) findViewById(R.id.fabSwap);
         FloatingActionButton fabMoveRider = (FloatingActionButton) findViewById(R.id.fabMoveRider);
+        FloatingActionButton fabSendCar = (FloatingActionButton) findViewById(R.id.fabSendCar);
 
         //set all as invisible
         fabDelete.setVisibility(View.INVISIBLE);
         fabSwap.setVisibility(View.INVISIBLE);
         fabMoveRider.setVisibility(View.INVISIBLE);
+        fabSendCar.setVisibility(View.INVISIBLE);
 
         //set the correct fab as visible if necessary
         if(selectedPersons_.size() == 1 && !RideGroup.checkContainsDriver(selectedPersons_)){ //there is only one person selected and it's a rider
             fabDelete.setVisibility(View.VISIBLE);
+        }
+        else if (selectedPersons_.size() == 1 && RideGroup.checkContainsDriver(selectedPersons_)){
+            fabSendCar.setVisibility(View.VISIBLE);
         }
         else if (selectedPersons_.size() == 2 && RideGroup.checkContainsDriver(selectedPersons_)){ //there are two ppl selected and
             fabMoveRider.setVisibility(View.VISIBLE);

@@ -18,6 +18,7 @@ import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
@@ -86,7 +87,14 @@ public class ViewPersonsListActivity extends ViewNavigation{
         //TODO: link with real sheets
         ListView listview = (ListView) findViewById(R.id.listView);
 
-        ArrayAdapter<RideGroup> adapter = new PersonsListAdapter(this, unsentRidesGroup_);
+        List<Person> unsentPersons = new ArrayList<Person>();
+        for(RideGroup rg: unsentRidesGroup_){
+            unsentPersons.add(rg.driver);
+            for(Person rider: rg.riders)
+                unsentPersons.add(rider);
+        }
+
+        ArrayAdapter<Person> adapter = new PersonsListAdapter(this, unsentPersons);
         listview.setAdapter(adapter);
 
     }

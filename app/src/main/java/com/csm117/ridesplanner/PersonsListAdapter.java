@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * Created by julianyang on 11/12/15.
  */
-public class PersonsListAdapter extends ArrayAdapter<RideGroup> {
-    public PersonsListAdapter(Context context, List<RideGroup> persons) {
+public class PersonsListAdapter extends ArrayAdapter<Person> {
+    public PersonsListAdapter(Context context, List<Person> persons) {
         super(context, 0, persons);
     }
 
@@ -32,7 +32,7 @@ public class PersonsListAdapter extends ArrayAdapter<RideGroup> {
         }
 
         // Get the data item for this position
-        RideGroup unsentRideGroup = getItem(position);
+        Person unsentPerson = getItem(position);
 
         // Lookup view for data population
         LinearLayout personsLinearLayout =
@@ -40,19 +40,11 @@ public class PersonsListAdapter extends ArrayAdapter<RideGroup> {
         personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         personsLinearLayout.removeAllViews();
-        TextView driverTextView = new TextView(super.getContext());
-        driverTextView.setText(unsentRideGroup.driver.toString());
-        driverTextView.setTypeface(unsentRideGroup.driver.getTypeface());
-        personsLinearLayout.addView(driverTextView);
-        unsentRideGroup.driver.setPersonListView_(driverTextView);
-
-        for(Person p: unsentRideGroup.riders){
-            TextView personTextView = new TextView(super.getContext());
-            personTextView.setText(p.toString());
-            personTextView.setTypeface(p.getTypeface());
-            personsLinearLayout.addView(personTextView);
-            p.setPersonListView_(personTextView);
-        }
+        TextView personTextView = new TextView(super.getContext());
+        personTextView.setText(unsentPerson.toString());
+        personTextView.setTypeface(unsentPerson.getTypeface());
+        personsLinearLayout.addView(personTextView);
+        unsentPerson.setPersonListView_(personTextView);
 
         // Return the completed view to render on screen
         return convertView;

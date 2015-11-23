@@ -1,5 +1,6 @@
 package com.csm117.ridesplanner.onClickListeners;
 
+import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
@@ -24,6 +25,7 @@ public class SendCarFabListener implements View.OnClickListener{
     public void onClick(View view) {
         if (viewRidesActivity_.selectedPersons_.size() == 1 && RideGroup.checkContainsDriver(viewRidesActivity_.selectedPersons_)){
             Person driver = viewRidesActivity_.selectedPersons_.get(0);
+            driver.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
             RideGroup rideGroup = RideGroup.getRideGroupByDriver(driver, viewRidesActivity_.rideGroups_);
 
             Sheet.getUnsentRideGroups().remove(rideGroup);
@@ -32,8 +34,10 @@ public class SendCarFabListener implements View.OnClickListener{
             for (Person p: rideGroup.riders)
                 p.getRideGroupView().setVisibility(View.INVISIBLE);*/
 
+
             Snackbar.make(view, "Highlighting people to indicate car has been sent", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
+            viewRidesActivity_.adapter_.notifyDataSetChanged();
             viewRidesActivity_.selectedPersons_.clear();
             viewRidesActivity_.updateButtonVisibility();
             Sheet.pushDataToOnlineSheet();

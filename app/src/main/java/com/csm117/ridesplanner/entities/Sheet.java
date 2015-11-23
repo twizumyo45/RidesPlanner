@@ -68,6 +68,9 @@ public class Sheet {
                     }
 
                 }
+                sortNames();
+                if (ViewRidesActivity.adapter_ != null)
+                    ViewRidesActivity.adapter_.notifyDataSetChanged();
             }
         }
 
@@ -96,14 +99,14 @@ public class Sheet {
         //note: 2d array must be perfect rectangle; no jagged edges
         //therefore, must write in empty spaces if we run out of ppl
         //find max length car
-        int maxRiderLen = 0;
+        int maxRowLen = 0;
         for (RideGroup rg: sentRideGroups_){
-            if (rg.riders.size() > maxRiderLen)
-                maxRiderLen = rg.riders.size();
+            if (rg.riders.size()+1 > maxRowLen)
+                maxRowLen = rg.riders.size()+1;
         }
         for (RideGroup rg: unsentRideGroups_){
-            if (rg.riders.size() > maxRiderLen)
-                maxRiderLen = rg.riders.size();
+            if (rg.riders.size() > maxRowLen)
+                maxRowLen = rg.riders.size();
         }
 
         for (RideGroup rg: sentRideGroups_){
@@ -111,7 +114,7 @@ public class Sheet {
             row.add("sent");
             row.add(rg.driver.toString());
 
-            for (int i = 0; i < maxRiderLen; i++) {
+            for (int i = 0; i < maxRowLen-1; i++) { //-1 to account for the extra "sent" column
                 if (i < rg.riders.size())
                     row.add(rg.riders.get(i).toString());
                 else
@@ -125,7 +128,7 @@ public class Sheet {
             ArrayList<String> row = new ArrayList<String>();
             row.add(rg.driver.toString());
 
-            for (int i = 0; i < maxRiderLen; i++) {
+            for (int i = 0; i < maxRowLen; i++) {
                 if (i < rg.riders.size())
                     row.add(rg.riders.get(i).toString());
                 else

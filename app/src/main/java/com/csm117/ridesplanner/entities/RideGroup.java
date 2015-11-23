@@ -1,6 +1,7 @@
 package com.csm117.ridesplanner.entities;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import com.csm117.ridesplanner.entities.Person;

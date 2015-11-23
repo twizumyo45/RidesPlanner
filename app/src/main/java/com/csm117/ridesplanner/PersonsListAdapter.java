@@ -10,14 +10,15 @@ import android.widget.TextView;
 
 import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
+import com.csm117.ridesplanner.entities.RideGroup;
 
 import java.util.List;
 
 /**
  * Created by julianyang on 11/12/15.
  */
-public class PersonsListAdapter extends ArrayAdapter<Person> {
-    public PersonsListAdapter(Context context, List<Person> persons) {
+public class PersonsListAdapter extends ArrayAdapter<RideGroup> {
+    public PersonsListAdapter(Context context, List<RideGroup> persons) {
         super(context, 0, persons);
     }
 
@@ -31,7 +32,7 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         }
 
         // Get the data item for this position
-        Person person = getItem(position);
+        RideGroup unsentRideGroup = getItem(position);
 
         // Lookup view for data population
         LinearLayout personsLinearLayout =
@@ -39,10 +40,19 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
 
         personsLinearLayout.removeAllViews();
-        TextView personTextView = new TextView(super.getContext());
-        personTextView.setText(person.toString());
-        personTextView.setTypeface(person.getTypeface());
-        personsLinearLayout.addView(personTextView);
+        TextView driverTextView = new TextView(super.getContext());
+        driverTextView.setText(unsentRideGroup.driver.toString());
+        driverTextView.setTypeface(unsentRideGroup.driver.getTypeface());
+        personsLinearLayout.addView(driverTextView);
+        unsentRideGroup.driver.setPersonListView_(driverTextView);
+
+        for(Person p: unsentRideGroup.riders){
+            TextView personTextView = new TextView(super.getContext());
+            personTextView.setText(p.toString());
+            personTextView.setTypeface(p.getTypeface());
+            personsLinearLayout.addView(personTextView);
+            p.setPersonListView_(personTextView);
+        }
 
         // Return the completed view to render on screen
         return convertView;

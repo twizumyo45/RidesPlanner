@@ -3,19 +3,9 @@ package com.csm117.ridesplanner;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -23,16 +13,15 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 
 import com.csm117.ridesplanner.entities.Driver;
+import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.entities.Rider;
-import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
-    List<Person> unsentPersons_ = Sheet.getUnsentPersons();
+    List<RideGroup> unsentRidesGroup_ = Sheet.getUnsentRideGroups();
     private String m_Text = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +30,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
         super.setUpNav();
 
         final Context context = this;
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +78,15 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
                 // show it
                 alertDialog.show();
+
             }
-        });
+
+        });*/
 
         //TODO: link with real sheets
         ListView listview = (ListView) findViewById(R.id.listView);
 
-        ArrayAdapter<Person> adapter = new PersonsListAdapter(this, unsentPersons_);
+        ArrayAdapter<RideGroup> adapter = new PersonsListAdapter(this, unsentRidesGroup_);
         listview.setAdapter(adapter);
 
     }

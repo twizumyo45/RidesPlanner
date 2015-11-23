@@ -21,7 +21,7 @@ import java.util.List;
 public class ViewRidesActivity extends ViewNavigation {
     //TODO: make getters and setters instead of public
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
-    public List<RideGroup> rideGroups_ = Sheet.getRideGroups();
+    public List<RideGroup> rideGroups_ = Sheet.getUnsentRideGroups();
     public List<List<Person>> riders_ = new ArrayList<List<Person>>();
     public static ArrayAdapter<RideGroup> adapter_;
 
@@ -32,7 +32,6 @@ public class ViewRidesActivity extends ViewNavigation {
         setContentView(R.layout.view_rides_navigation_activity);
         super.setUpNav();
 
-        //TODO: link with real sheets
         Sheet.getDataFromOnlineSheet();
         GridView gridview = (GridView) findViewById(R.id.gridView);
 

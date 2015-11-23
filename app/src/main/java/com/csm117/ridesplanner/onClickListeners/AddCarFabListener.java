@@ -28,7 +28,9 @@ public class AddCarFabListener implements View.OnClickListener{
             Snackbar.make(view, "Sending car!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
-            ArrayList<Person> personsList = ViewPersonsListActivity_.selectedPersons_;
+            ArrayList<Person> personsList = new ArrayList<Person>();
+            for(Person p : ViewPersonsListActivity_.selectedPersons_)
+                    personsList.add(p);
             Person driver = RideGroup.getDriver(personsList);
             personsList.remove(driver);
             Sheet.getRideGroups().add(new RideGroup(driver, personsList));

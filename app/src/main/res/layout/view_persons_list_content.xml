@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:visibility="invisible"
-        android:src="@android:drawable/ic_menu_directions"
+        android:src="@android:drawable/ic_input_add"
         android:layout_marginBottom="56dp"
         android:layout_alignParentBottom="true"
         android:layout_alignLeft="@+id/fab"

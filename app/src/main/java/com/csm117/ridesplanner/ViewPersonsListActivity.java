@@ -19,6 +19,7 @@ import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
@@ -93,6 +94,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
             for(Person rider: rg.riders)
                 unsentPersons.add(rider);
         }
+        Collections.sort(unsentPersons);
 
         ArrayAdapter<Person> adapter = new PersonsListAdapter(this, unsentPersons);
         listview.setAdapter(adapter);

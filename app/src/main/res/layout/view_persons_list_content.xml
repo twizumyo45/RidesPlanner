@@ -14,6 +14,16 @@
     tools:context="com.csm117.ridesplanner.ViewPersonsListActivity">
 
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:clickable="false"
+        android:choiceMode="multipleChoiceModal"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -23,12 +33,16 @@
         android:src="@android:drawable/arrow_up_float"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
-    <ListView
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddCar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:choiceMode="multipleChoiceModal"/>
+        android:layout_gravity="bottom|end"
+        android:visibility="invisible"
+        android:src="@android:drawable/ic_menu_directions"
+        android:layout_marginBottom="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/fab"
+        android:layout_alignStart="@+id/fab" />
 </RelativeLayout>

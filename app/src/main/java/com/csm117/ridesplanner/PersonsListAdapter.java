@@ -1,6 +1,8 @@
 package com.csm117.ridesplanner;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
+import com.csm117.ridesplanner.onClickListeners.OnClickPersonsListListener;
 
 import java.util.List;
 
@@ -17,8 +20,10 @@ import java.util.List;
  * Created by julianyang on 11/12/15.
  */
 public class PersonsListAdapter extends ArrayAdapter<Person> {
-    public PersonsListAdapter(Context context, List<Person> persons) {
+    ViewPersonsListActivity viewPersonsListActivity_;
+    public PersonsListAdapter(Context context, List<Person> persons, ViewPersonsListActivity vra) {
         super(context, 0, persons);
+        viewPersonsListActivity_ = vra;
     }
 
     @Override
@@ -31,18 +36,38 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         }
 
         // Get the data item for this position
-        Person person = getItem(position);
+        final Person person = getItem(position);
 
         // Lookup view for data population
-        LinearLayout personsLinearLayout =
-                (LinearLayout) convertView.findViewById(R.id.persons);
-        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
+//        LinearLayout personsLinearLayout =
+//                (LinearLayout) convertView.findViewById(R.id.persons);
+//        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
+//        personsLinearLayout.removeAllViews();
 
-        personsLinearLayout.removeAllViews();
-        TextView personTextView = new TextView(super.getContext());
+        Log.d("person", person.toString());
+        TextView personTextView =(TextView) convertView.findViewById(R.id.persons);
+//        personTextView.setOnClickListener(new OnClickPersonsListListener(viewPersonsListActivity_, person));
+        personTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("test", "click");
+                if (!viewPersonsListActivity_.selectedPersons_.contains(person)) {
+                    v.setBackgroundColor(0x6F00FF80);
+                    viewPersonsListActivity_.selectedPersons_.add(person);
+                    Log.d("listener", "adding: " + person.toString());
+                } else{
+                    v.setBackgroundColor(Color.TRANSPARENT);
+                    viewPersonsListActivity_.selectedPersons_.remove(person);
+                    Log.d("listener", "removing: " + person.toString());
+                }
+                viewPersonsListActivity_.updateButtonVisibility();
+                return;
+            }
+        });
         personTextView.setText(person.toString());
         personTextView.setTypeface(person.getTypeface());
-        personsLinearLayout.addView(personTextView);
+//        personTextView.setClickable(true);
+//        personsLinearLayout.addView(personTextView);
 
         // Return the completed view to render on screen
         return convertView;

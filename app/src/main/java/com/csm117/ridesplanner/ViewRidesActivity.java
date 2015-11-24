@@ -32,11 +32,11 @@ public class ViewRidesActivity extends ViewNavigation {
         super.setUpNav();
 
         Sheet.getDataFromOnlineSheet();
-        GridView gridview = (GridView) findViewById(R.id.gridView);
+        GridView rideGroups = (GridView) findViewById(R.id.rideGroups);
 
 
         adapter_ = new RideGroupAdapter(this, rideGroups_, this);
-        gridview.setAdapter(adapter_);
+        rideGroups.setAdapter(adapter_);
 
         //hook up listeners to buttons
         FloatingActionButton fabDelete = (FloatingActionButton) findViewById(R.id.fabDelete);

@@ -30,13 +30,13 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/listView"
+            android:id="@+id/personsList"
             android:choiceMode="multipleChoiceModal"/>
         <include layout="@layout/view_rides_content"
                  android:layout_width="0dp"
                  android:layout_weight="1"
                  android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/listView"
-            android:layout_toStartOf="@+id/listView"/>
+            android:layout_toLeftOf="@+id/personsList"
+            android:layout_toStartOf="@+id/personsList"/>
     </LinearLayout>
 </RelativeLayout>

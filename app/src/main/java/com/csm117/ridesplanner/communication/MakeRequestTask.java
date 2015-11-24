@@ -53,7 +53,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
     private Exception mLastError = null;
     String functionName_;
     List<Object> parameterList_;
-    OnTaskCompleted listener_;
+    OnTaskCompleted callback_;
     GoogleAccountCredential credential;
 
     public MakeRequestTask(String functionName,List<Object> parameterList, OnTaskCompleted listener) {
@@ -67,7 +67,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
 
         functionName_ = functionName;
         parameterList_ = parameterList;
-        listener_ = listener;
+        callback_ = listener;
     }
 
     /**
@@ -172,7 +172,7 @@ public class MakeRequestTask extends AsyncTask<Void, Void, Object> {
 
 //    @Override
     protected void onPostExecute(Object output) {
-        listener_.onTaskCompleted(output);
+        callback_.onTaskCompleted(output);
     }
 
     @Override

@@ -66,6 +66,9 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
         riders.setOrientation(LinearLayout.VERTICAL);
         riders.removeAllViews();
 
+        //make layout params so that textview width will match parent
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+
         for(Person rider : riderNames) {
             TextView riderTextView = new TextView(super.getContext());
             riderTextView.setSelected(true);
@@ -74,6 +77,9 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
                 riderTextView.setOnClickListener(onClickPersonListener);
             }
             riderTextView.setText(rider.toString());
+            riderTextView.setLayoutParams(params);
+
+
             riders.addView(riderTextView);
             rider.setRideGroupView(riderTextView);
         }

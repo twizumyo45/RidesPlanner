@@ -27,7 +27,8 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
 
     ViewRidesActivity viewRidesActivity_;
 
-    public RideGroupAdapter(Context context, List<RideGroup> rideGroups, ViewRidesActivity vra) {
+    public RideGroupAdapter(Context context, List<RideGroup> rideGroups,
+                            ViewRidesActivity vra) {
         super(context, 0, rideGroups);
         viewRidesActivity_ = vra;
     }
@@ -50,7 +51,9 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
 
         // Populate the data into the template view using the data object
         driverTextView.setText(rideGroup.driver.toString());
-        driverTextView.setOnClickListener(new OnClickPersonListener(viewRidesActivity_, rideGroup.driver));
+        if (viewRidesActivity_ != null) {
+            driverTextView.setOnClickListener(new OnClickPersonListener(viewRidesActivity_, rideGroup.driver));
+        }
         driverTextView.setTypeface(rideGroup.driver.getTypeface());
         driverTextView.setBackgroundColor(Color.TRANSPARENT);
         //give driver a reference to it's textview
@@ -63,12 +66,20 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
         riders.setOrientation(LinearLayout.VERTICAL);
         riders.removeAllViews();
 
+        //make layout params so that textview width will match parent
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+
         for(Person rider : riderNames) {
             TextView riderTextView = new TextView(super.getContext());
             riderTextView.setSelected(true);
-            OnClickPersonListener onClickPersonListener = new OnClickPersonListener(viewRidesActivity_, rider);
-            riderTextView.setOnClickListener(onClickPersonListener);
+            if(viewRidesActivity_ != null) {
+                OnClickPersonListener onClickPersonListener = new OnClickPersonListener(viewRidesActivity_, rider);
+                riderTextView.setOnClickListener(onClickPersonListener);
+            }
             riderTextView.setText(rider.toString());
+            riderTextView.setLayoutParams(params);
+
+
             riders.addView(riderTextView);
             rider.setRideGroupView(riderTextView);
         }

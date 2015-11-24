@@ -37,7 +37,7 @@ public class Sheet {
     }
 
     public static void getDataFromOnlineSheet() {
-        class MyPushCallback implements OnTaskCompleted {
+        class MyPullCallback implements OnTaskCompleted {
             public void onTaskCompleted(Object output) {
                 //do your stuff with the result stuff
                 Log.d("Google Scripts", "PULL WORKED!");
@@ -48,7 +48,7 @@ public class Sheet {
                 for (ArrayList<String> car : (ArrayList<ArrayList<String>>) output) {
                     List<Person> riders = new ArrayList<Person>();
                     Person driver = null;
-                    if (car.get(0).equals("sent")) { //fill up the sent car
+                    if (car.get(0).toLowerCase().equals("sent")) { //fill up the sent car
                         for (int i = 1; i < car.size(); i++) { //skip first entry, which is "sent"
                             if (i == 1) //first name should be the driver
                                 driver = new Driver(car.get(i));
@@ -77,15 +77,16 @@ public class Sheet {
         List<Object> parameters = new ArrayList<Object>();
         Log.d("Sheet", "sheetID is: " + sheetID);
         parameters.add(sheetID); // sheet id
-        MyPushCallback cb = new MyPushCallback();
+        MyPullCallback cb = new MyPullCallback();
         new MakeRequestTask("getData", parameters, cb).execute();
     }
 
     public static void pushDataToOnlineSheet(){
-        class MyPullCallback implements OnTaskCompleted{
+        class MyPushCallback implements OnTaskCompleted{
             public void onTaskCompleted(Object output){
                 //do your stuff
                 Log.d("Google Scripts", "PUSH WORKED!");
+                Log.d("ArrayLists", "Unsent: " + Sheet.getUnsentRideGroups().size() + " Sent: " + Sheet.getSentRideGroups().size());
             }
         }
 
@@ -140,7 +141,7 @@ public class Sheet {
 
         parameters.add(newSheet);
 
-        MyPullCallback cb = new MyPullCallback();
+        MyPushCallback cb = new MyPushCallback();
         new MakeRequestTask("refillData", parameters, cb).execute(); //get mCredential
     }
 

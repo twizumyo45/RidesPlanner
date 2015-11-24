@@ -35,14 +35,22 @@ public class RideGroup {
     }
     //returns whether or not the person was successfully removed
     public boolean remove(Person personToBeDeleted){
-        for (Person r: riders){
-            if (r==personToBeDeleted) {
-                riders.remove(r);
-                return true;
+        int foundRider = -1;
+        for (int i = 0; i < riders.size(); i++){
+            if (riders.get(i).compareTo(personToBeDeleted)==0) {
+                foundRider = i;
             }
         }
-        if(driver==personToBeDeleted) {
-            driver.name_="";
+        if(foundRider != -1){
+            riders.remove(foundRider);
+            Log.d("Remove", "removing: " + personToBeDeleted.toString());
+            return true;
+        }
+
+        if(driver.compareTo(personToBeDeleted)==0) {
+            driver = new Driver("");
+            Log.d("Remove", "removing: " + personToBeDeleted.toString());
+            return true;
         }
         return false;
     }
@@ -119,26 +127,23 @@ public class RideGroup {
         return stepNum == 2;
     }
 
-    public static RideGroup createRideGroupFromSelected(List<RideGroup> groupList, List<Person> personList) {
+    public static RideGroup createRideGroupFromSelected(List<Person> personList) {
         //find each person from personList in groupList
         //if they are a driver, set as driver
         //if they are a person, add that person to arraylist
 
-        String driverName="";
-        List<Person> riders = new ArrayList<Person>();
+        String newDriverName="";
+        List<Person> newRiders = new ArrayList<Person>();
 
-        for(int i=0; i<personList.size(); i++) {
-            for(RideGroup g : groupList) {
-                if(g.riders.contains(personList.get(i))) {
-                    riders.add(personList.get(i));
-                }
-                else if(g.driver==personList.get(i)) {
-                    driverName = personList.get(i).name_;
-                }
-            }
+        for (Person p: personList){
+            if (p.getClass() == Driver.class)
+                newDriverName = p.toString();
+            else
+                newRiders.add(p);
         }
-        Driver driver = new Driver(driverName);
-        RideGroup rideGroup = new RideGroup(driver, riders);
+
+        Driver newDriver = new Driver(newDriverName);
+        RideGroup rideGroup = new RideGroup(newDriver, newRiders);
         return rideGroup;
     }
 }

@@ -1,20 +1,14 @@
 package com.csm117.ridesplanner;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 
-import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.RideGroup;
-import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.SendCarFromListFabListener;
@@ -25,10 +19,13 @@ import java.util.Collections;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
-    List<RideGroup> unsentRidesGroup_ = Sheet.getUnsentRideGroups();
+
+    List<RideGroup> unsentRidesGroup_;
+    List<RideGroup> sentRidesGroup_;
     private String m_Text = "";
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
-    public static ArrayAdapter<Person> adapter_;
+    public static ArrayAdapter<RideGroup> rideGroupAdapter_;
+    public static ArrayAdapter<Person> personsListAdapter_;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,9 @@ public class ViewPersonsListActivity extends ViewNavigation{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_persons_list_navigation_activity);
         super.setUpNav();
-
+        Sheet.getDataFromOnlineSheet();
+        unsentRidesGroup_ = Sheet.getUnsentRideGroups();
+        sentRidesGroup_ = Sheet.getSentRideGroups();
         final Context context = this;
 
         /*
@@ -92,10 +91,9 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
         });*/
 
-        //TODO: link with real sheets
-        ListView listview = (ListView) findViewById(R.id.listView);
-
-        List<Person> unsentPersons = new ArrayList<Person>();
+        // Setup LHS of the view (list of unsent people)
+        ListView personsList = (ListView) findViewById(R.id.personsList);
+        List<Person> unsentPersons = new ArrayList<>();
         for(RideGroup rg: unsentRidesGroup_){
             unsentPersons.add(rg.driver);
             for(Person rider: rg.riders)
@@ -103,8 +101,23 @@ public class ViewPersonsListActivity extends ViewNavigation{
         }
         Collections.sort(unsentPersons);
 
-        adapter_ = new PersonsListAdapter(this, unsentPersons, this);
-        listview.setAdapter(adapter_);
+        personsListAdapter_ = new PersonsListAdapter(this, unsentPersons, this);
+        personsList.setAdapter(personsListAdapter_);
+
+        // Setup RHS of the view (list of sent rideGroups)
+        Log.d("SplitView", "Size of sentRidesGroup: " + sentRidesGroup_.size());
+        for (RideGroup r : sentRidesGroup_) {
+            Log.d("SplitView", r.driver.toString());
+            for (Person p : r.riders) {
+                Log.d("SplitView", p.toString());
+            }
+        }
+        GridView sentRideGroups = (GridView) findViewById(R.id.rideGroups);
+        sentRideGroups.setNumColumns(1);
+
+        rideGroupAdapter_ =
+                new RideGroupAdapter(this, sentRidesGroup_, null);
+        sentRideGroups.setAdapter(rideGroupAdapter_);
 
         //listener for button
         FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);

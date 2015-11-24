@@ -16,15 +16,18 @@ import java.util.Collections;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
-    List<RideGroup> unsentRidesGroup_ = Sheet.getUnsentRideGroups();
-    List<RideGroup> sentRidesGroup_ = Sheet.getSentRideGroups();
+
+    List<RideGroup> unsentRidesGroup_;
+    List<RideGroup> sentRidesGroup_;
     private String m_Text = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_persons_list_navigation_activity);
         super.setUpNav();
-
+        Sheet.getDataFromOnlineSheet();
+        unsentRidesGroup_ = Sheet.getUnsentRideGroups();
+        sentRidesGroup_ = Sheet.getSentRideGroups();
         final Context context = this;
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

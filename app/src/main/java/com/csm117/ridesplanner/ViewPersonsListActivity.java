@@ -1,17 +1,26 @@
 package com.csm117.ridesplanner;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
 
+import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.RideGroup;
+import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
+import com.csm117.ridesplanner.onClickListeners.SendCarFromListFabListener;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -20,8 +29,12 @@ public class ViewPersonsListActivity extends ViewNavigation{
     List<RideGroup> unsentRidesGroup_;
     List<RideGroup> sentRidesGroup_;
     private String m_Text = "";
+    public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
+    public static ArrayAdapter<Person> adapter_;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        selectedPersons_ = new ArrayList<Person>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_persons_list_navigation_activity);
         super.setUpNav();
@@ -29,6 +42,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
         unsentRidesGroup_ = Sheet.getUnsentRideGroups();
         sentRidesGroup_ = Sheet.getSentRideGroups();
         final Context context = this;
+
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

@@ -17,21 +17,28 @@ import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
+import com.csm117.ridesplanner.onClickListeners.SendCarFromListFabListener;
 
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
     List<RideGroup> unsentRidesGroup_ = Sheet.getUnsentRideGroups();
     private String m_Text = "";
+    public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
+    public static ArrayAdapter<Person> adapter_;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        selectedPersons_ = new ArrayList<Person>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_persons_list_navigation_activity);
         super.setUpNav();
 
         final Context context = this;
+
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -96,8 +103,12 @@ public class ViewPersonsListActivity extends ViewNavigation{
         }
         Collections.sort(unsentPersons);
 
-        ArrayAdapter<Person> adapter = new PersonsListAdapter(this, unsentPersons);
-        listview.setAdapter(adapter);
+        adapter_ = new PersonsListAdapter(this, unsentPersons, this);
+        listview.setAdapter(adapter_);
+
+        //listener for button
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+        fab2.setOnClickListener(new SendCarFromListFabListener(this));
 
     }
 }

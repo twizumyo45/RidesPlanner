@@ -32,4 +32,15 @@
         android:src="@android:drawable/arrow_up_float"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:src="@android:drawable/arrow_up_float"
+        android:layout_below="@+id/fab"
+        android:layout_alignLeft="@+id/fab"
+        android:layout_alignStart="@+id/fab"
+        android:layout_marginTop="109dp" />
 </RelativeLayout>

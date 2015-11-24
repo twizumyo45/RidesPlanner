@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.RideGroup;
+import com.csm117.ridesplanner.onClickListeners.OnClickPersonViewListener;
+
 
 import java.util.List;
 
@@ -18,8 +20,11 @@ import java.util.List;
  * Created by julianyang on 11/12/15.
  */
 public class PersonsListAdapter extends ArrayAdapter<Person> {
-    public PersonsListAdapter(Context context, List<Person> persons) {
+
+    ViewPersonsListActivity viewPersonsListActivity_;
+    public PersonsListAdapter(Context context, List<Person> persons, ViewPersonsListActivity vpla) {
         super(context, 0, persons);
+        viewPersonsListActivity_ = vpla;
     }
 
     @Override
@@ -43,6 +48,10 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         TextView personTextView = new TextView(super.getContext());
         personTextView.setText(unsentPerson.toString());
         personTextView.setTypeface(unsentPerson.getTypeface());
+
+        OnClickPersonViewListener onClickPersonViewListener = new OnClickPersonViewListener(viewPersonsListActivity_, unsentPerson);
+        personsLinearLayout.setOnClickListener(onClickPersonViewListener);
+        //personTextView.setOnClickListener(onClickPersonViewListener);
         personsLinearLayout.addView(personTextView);
         unsentPerson.setPersonListView_(personTextView);
 

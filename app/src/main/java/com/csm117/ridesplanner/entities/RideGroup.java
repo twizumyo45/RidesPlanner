@@ -1,6 +1,7 @@
 package com.csm117.ridesplanner.entities;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 
 import com.csm117.ridesplanner.entities.Person;
@@ -84,6 +85,16 @@ public class RideGroup {
         for (Person p: personsList) {
             if (p.getClass() == Rider.class)
                 return p;
+        }
+        return null;
+    }
+
+    //returns the ride group the given driver is in
+    //if driver DNE, then return null
+    public static RideGroup getRideGroupByDriver(Person driver, List<RideGroup> rideGroups){
+        for(RideGroup rg: rideGroups){
+            if (rg.driver == driver)
+                return rg;
         }
         return null;
     }

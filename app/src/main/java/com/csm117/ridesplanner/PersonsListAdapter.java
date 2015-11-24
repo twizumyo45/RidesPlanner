@@ -10,9 +10,10 @@ import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.csm117.ridesplanner.R;
+import com.csm117.ridesplanner.*;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.onClickListeners.OnClickPersonsListListener;
+import com.csm117.ridesplanner.entities.RideGroup;
 
 import java.util.List;
 
@@ -36,14 +37,15 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         }
 
         // Get the data item for this position
-        final Person person = getItem(position);
+        Person unsentPerson = getItem(position);
 
         // Lookup view for data population
-//        LinearLayout personsLinearLayout =
-//                (LinearLayout) convertView.findViewById(R.id.persons);
-//        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
-//        personsLinearLayout.removeAllViews();
+        LinearLayout personsLinearLayout =
+                (LinearLayout) convertView.findViewById(R.id.persons);
+        personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        personsLinearLayout.removeAllViews();
 
+/*
         Log.d("person", person.toString());
         TextView personTextView =(TextView) convertView.findViewById(R.id.persons);
 //        personTextView.setOnClickListener(new OnClickPersonsListListener(viewPersonsListActivity_, person));
@@ -68,6 +70,13 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         personTextView.setTypeface(person.getTypeface());
 //        personTextView.setClickable(true);
 //        personsLinearLayout.addView(personTextView);
+*/
+        personsLinearLayout.removeAllViews();
+        TextView personTextView = new TextView(super.getContext());
+        personTextView.setText(unsentPerson.toString());
+        personTextView.setTypeface(unsentPerson.getTypeface());
+        personsLinearLayout.addView(personTextView);
+        unsentPerson.setPersonListView_(personTextView);
 
         // Return the completed view to render on screen
         return convertView;

@@ -44,9 +44,10 @@ public class SwapRidersFabListener implements View.OnClickListener {
 
             person1.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
             person2.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
-            viewRidesActivity_.adapter_.notifyDataSetChanged();
+
             Snackbar.make(view, "Swapping selected riders!", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
+            viewRidesActivity_.adapter_.notifyDataSetChanged();
             viewRidesActivity_.selectedPersons_.clear();
             viewRidesActivity_.updateButtonVisibility();
             Sheet.sortNames();

@@ -52,6 +52,7 @@ public class RideGroupAdapter extends ArrayAdapter<RideGroup>{
         driverTextView.setText(rideGroup.driver.toString());
         driverTextView.setOnClickListener(new OnClickPersonListener(viewRidesActivity_, rideGroup.driver));
         driverTextView.setTypeface(rideGroup.driver.getTypeface());
+        driverTextView.setBackgroundColor(Color.TRANSPARENT);
         //give driver a reference to it's textview
         rideGroup.driver.setRideGroupView(driverTextView);
 

@@ -16,8 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,19 +29,18 @@ import android.widget.TextView;
 import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.entities.Rider;
-import com.csm117.ridesplanner.R;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.AddCarFabListener;
 import com.csm117.ridesplanner.onClickListeners.MoveRiderFabListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ViewPersonsListActivity extends ViewNavigation{
-    List<Person> unsentPersons_ = Sheet.getUnsentPersons();
-    public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
-    public List<RideGroup> rideGroups_ = Sheet.getRideGroups();
+    List<RideGroup> unsentRidesGroup_ = Sheet.getUnsentRideGroups();
+    ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
     private String m_Text = "";
     public static ArrayAdapter<Person> adapter_;
     @Override
@@ -51,6 +50,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
         super.setUpNav();
 
         final Context context = this;
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,15 +100,17 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
                 // show it
                 alertDialog.show();
+
             }
-        });
+
+        });*/
 
         FloatingActionButton fabAddCar = (FloatingActionButton) findViewById(R.id.fabAddCar);
         fabAddCar.setOnClickListener(new AddCarFabListener(this));
 
         //TODO: link with real sheets
         ListView listview = (ListView) findViewById(R.id.listView);
-
+/*
         adapter_ = new PersonsListAdapter(this, unsentPersons_, this);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -130,6 +132,18 @@ public class ViewPersonsListActivity extends ViewNavigation{
         listview.setAdapter(adapter_);
 
     }
+=======*/
+        List<Person> unsentPersons = new ArrayList<Person>();
+        for (RideGroup rg : unsentRidesGroup_) {
+            unsentPersons.add(rg.driver);
+            for (Person rider : rg.riders)
+                unsentPersons.add(rider);
+        }
+        Collections.sort(unsentPersons);
+
+        ArrayAdapter<Person> adapter = new PersonsListAdapter(context, unsentPersons, this);
+        listview.setAdapter(adapter);
+    }
 
     public void updateButtonVisibility(){
         //get floating action buttons
@@ -137,7 +151,6 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
         //set all as invisible
         fabAddCar.setVisibility(View.INVISIBLE);
-
         //set the correct fab as visible if necessary
         if (RideGroup.checkSingleDriver(selectedPersons_)){ //there is only one person selected and it's a rider
             fabAddCar.setVisibility(View.VISIBLE);

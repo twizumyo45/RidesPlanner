@@ -1,7 +1,9 @@
 package com.csm117.ridesplanner.onClickListeners;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,13 +29,9 @@ public class MoveRiderFabListener implements View.OnClickListener {
             Snackbar.make(view, "Moving selected rider!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
-            Person person1 = viewRidesActivity_.selectedPersons_.get(0);
-            Person person2 = viewRidesActivity_.selectedPersons_.get(1);
-
             RideGroup.moveRider(viewRidesActivity_.selectedPersons_, viewRidesActivity_.rideGroups_);
 
-            person1.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
-            person2.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
+
 
             viewRidesActivity_.adapter_.notifyDataSetChanged();
             viewRidesActivity_.selectedPersons_.clear();

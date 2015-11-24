@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Roger\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-50d4520bbdcdbe4976b0d2d8d809f1842494c437.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.1.3\f6c3aed1cdfa21b5c1737c915186ea93a95a58bd\jackson-core-2.1.3.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="f6c3aed1cdfa21b5c1737c915186ea93a95a58bd">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\jackson-core-2.1.3-4fac93c809cd406b9c88f37ad306b4f26c9605af.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\RidesPlanner\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\classes-bd969dfc2cc011ec4796662a76fa193ef28e21e0.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.http-client\google-http-client-jackson2\1.20.0\2408070b2abec043624d35b35e30450f1b663858\google-http-client-jackson2-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2408070b2abec043624d35b35e30450f1b663858">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-http-client-jackson2-1.20.0-a76a06751a2ee512674b080704edf0cc9a0b4d14.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.http-client\google-http-client-android\1.20.0\313dc99a7963523871495897ca11aa8472b3c6fd\google-http-client-android-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="313dc99a7963523871495897ca11aa8472b3c6fd">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-http-client-android-1.20.0-0ae2994c5188a5a6f742ab79655db41e1a55b0d8.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.oauth-client\google-oauth-client\1.20.0\1d086ac5756475ddf451af2e2df6e288d18608ca\google-oauth-client-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1d086ac5756475ddf451af2e2df6e288d18608ca">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-oauth-client-1.20.0-3d50184c3f866782340f03ef4dac268ab0885118.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\RidesPlanner\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c0c912d58c9468b1f9d9769c8975afdf2c85d681">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\classes-0cd2ca13d10fe6c579709d1514d22225e74af919.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\1.3.9\40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf\jsr305-1.3.9.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="40719ea6961c0cb6afaeb6a921eaa1f6afd4cfdf">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\jsr305-1.3.9-a45bc5989f3432ea3bd826df1f56a7faa606f591.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\RidesPlanner\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-c0a6b5dd6f36d51cb4fe95ec6ea5cf79aaeb70f0.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.http-client\google-http-client\1.20.0\93d82db2bca534960253f43424b2ba9d7638b4d2\google-http-client-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="93d82db2bca534960253f43424b2ba9d7638b4d2">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-http-client-1.20.0-fb67442686d513753bb54258fa2253d1442c1880.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\RidesPlanner\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\7.8.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d11330ea68c0d964d30d5caed1f27e6b1488b189">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\classes-b69b1de75a76de8b2282e75e23b32668fa318a89.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.apis\google-api-services-script\v1-rev1-1.20.0\ed87b373e6fa4e1924c33fc43cf80f392de4e900\google-api-services-script-v1-rev1-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ed87b373e6fa4e1924c33fc43cf80f392de4e900">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-api-services-script-v1-rev1-1.20.0-8c2ec1248e9cdfef7cc4fa82fe760450512fe5fb.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.guava\guava-jdk5\13.0\381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7\guava-jdk5-13.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="381ae6c8add7c98e9bcddb1e0b898400cd6fc3f7">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\guava-jdk5-13.0-a0d19ca2b0e1f61e6128a78680f66a352e588073.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.api-client\google-api-client-android\1.20.0\5673179575c32b69a474334255c3044adf18d40\google-api-client-android-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="05673179575c32b69a474334255c3044adf18d40">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-api-client-android-1.20.0-e5d000fac81bdb9489c086a73e7e9cb677512695.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\RidesPlanner\app\build\intermediates\exploded-aar\com.android.support\design\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\classes-88a74d5ac0be2f5f709d1a33bf48addf58be8552.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\RidesPlanner\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\classes-8ef11fe6a3ed009ee314db0a83a1c46577fda994.jar" />
+    </item>
+    <item
+        jar="C:\Users\Roger\.gradle\caches\modules-2\files-2.1\com.google.api-client\google-api-client\1.20.0\d3e66209ae9e749b2d6833761e7885f60f285564\google-api-client-1.20.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d3e66209ae9e749b2d6833761e7885f60f285564">
+        <dex dex="C:\Users\Roger\RidesPlanner\app\build\intermediates\pre-dexed\debug\google-api-client-1.20.0-3f2e8b9668040a453639953a33c2e3a2e88757bf.jar" />
+    </item>
+
+</items>

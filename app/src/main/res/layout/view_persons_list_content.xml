@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/arrow_up_float"
+        android:src="@android:drawable/ic_menu_add"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"/>
     <android.support.design.widget.FloatingActionButton
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|end"
-        android:src="@android:drawable/arrow_up_float"
+        android:src="@android:drawable/ic_media_next"
         android:layout_below="@+id/fab"
         android:layout_alignLeft="@+id/fab"
         android:layout_alignStart="@+id/fab"

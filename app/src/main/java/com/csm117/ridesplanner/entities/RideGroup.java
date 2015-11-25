@@ -71,6 +71,17 @@ public class RideGroup {
         return containsDriver==1;
     }
 
+    //input: list of persons
+    //output: boolean; true if list of persons contains exactly one driver
+    public static boolean checkSingleDriver(ArrayList<Person> personsList){
+        int countDrivers = 0;
+        for (Person p: personsList) {
+            if (p.getClass() == Driver.class)
+                countDrivers++;
+        }
+        return countDrivers == 1;
+    }
+
     //returns the first driver in the list
     public static Person getDriver(ArrayList<Person> personsList){
         for (Person p: personsList) {

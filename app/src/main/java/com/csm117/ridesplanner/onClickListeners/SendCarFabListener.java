@@ -23,7 +23,7 @@ public class SendCarFabListener implements View.OnClickListener{
     }
 
     public void onClick(View view) {
-        if (viewRidesActivity_.selectedPersons_.size() == 1 && RideGroup.checkContainsDriver(viewRidesActivity_.selectedPersons_)){
+        if (viewRidesActivity_.selectedPersons_.size() == 1 && RideGroup.checkContainsExactlyOneDriver(viewRidesActivity_.selectedPersons_)){
             Person driver = viewRidesActivity_.selectedPersons_.get(0);
             driver.getRideGroupView().setBackgroundColor(Color.TRANSPARENT);
             RideGroup rideGroup = RideGroup.getRideGroupByDriver(driver, viewRidesActivity_.rideGroups_);

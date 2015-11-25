@@ -1,22 +1,15 @@
 package com.csm117.ridesplanner;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.RadioButton;
 
-import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.RideGroup;
-import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.SendCarFromListFabListener;
@@ -141,6 +134,17 @@ public class ViewPersonsListActivity extends ViewNavigation{
         //listener for button
         FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab2.setOnClickListener(new SendCarFromListFabListener(this));
+        updateButtonVisibility();
 
+    }
+    public void updateButtonVisibility(){
+        //get floating action buttons
+        FloatingActionButton fabSendCar = (FloatingActionButton) findViewById(R.id.fab2);
+        //set all as invisible
+        fabSendCar.setVisibility(View.INVISIBLE);
+        //set the correct fab as visible if necessary
+        if(selectedPersons_.size() >= 1 && RideGroup.checkContainsExactlyOneDriver(selectedPersons_)){ //there is only one person selected and it's a rider
+            fabSendCar.setVisibility(View.VISIBLE);
+        }
     }
 }

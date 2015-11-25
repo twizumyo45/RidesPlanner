@@ -65,13 +65,13 @@ public class ViewRidesActivity extends ViewNavigation {
         fabSendCar.setVisibility(View.INVISIBLE);
 
         //set the correct fab as visible if necessary
-        if(selectedPersons_.size() == 1 && !RideGroup.checkContainsDriver(selectedPersons_)){ //there is only one person selected and it's a rider
+        if(selectedPersons_.size() == 1 && !RideGroup.checkContainsExactlyOneDriver(selectedPersons_)){ //there is only one person selected and it's a rider
             fabDelete.setVisibility(View.VISIBLE);
         }
-        else if (selectedPersons_.size() == 1 && RideGroup.checkContainsDriver(selectedPersons_)){
+        else if (selectedPersons_.size() == 1 && RideGroup.checkContainsExactlyOneDriver(selectedPersons_)){
             fabSendCar.setVisibility(View.VISIBLE);
         }
-        else if (selectedPersons_.size() == 2 && RideGroup.checkContainsDriver(selectedPersons_)){ //there are two ppl selected and
+        else if (selectedPersons_.size() == 2 && RideGroup.checkContainsExactlyOneDriver(selectedPersons_)){ //there are two ppl selected and
             fabMoveRider.setVisibility(View.VISIBLE);
         }
         else if (selectedPersons_.size() == 2){

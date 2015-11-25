@@ -62,13 +62,13 @@ public class RideGroup {
     //STATIC METHODS
     //input: list of persons
     //output: boolean; true if list of persons contains a driver
-    public static boolean checkContainsDriver(ArrayList<Person> personsList){
-        boolean containsDriver = false;
+    public static boolean checkContainsExactlyOneDriver(ArrayList<Person> personsList){
+        int containsDriver = 0;
         for (Person p: personsList) {
             if (p.getClass() == Driver.class)
-                containsDriver = true;
+                containsDriver++;
         }
-        return containsDriver;
+        return containsDriver==1;
     }
 
     //returns the first driver in the list

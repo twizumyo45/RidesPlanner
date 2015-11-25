@@ -1,18 +1,14 @@
 package com.csm117.ridesplanner.onClickListeners;
 
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
 import com.csm117.ridesplanner.ViewPersonsListActivity;
-import com.csm117.ridesplanner.ViewRidesActivity;
 import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.entities.Sheet;
-
-import java.util.ArrayList;
 
 
 /**
@@ -29,7 +25,7 @@ public class SendCarFromListFabListener implements View.OnClickListener{
 
     public void onClick(View view) {
         Log.d("send", "SENTCLICK!");
-        if(viewPersonsListActivity_.selectedPersons_.size()>=1 && RideGroup.checkContainsDriver(viewPersonsListActivity_.selectedPersons_)) {
+        if(viewPersonsListActivity_.selectedPersons_.size()>=1 && RideGroup.checkContainsExactlyOneDriver(viewPersonsListActivity_.selectedPersons_)) {
             for(Person p: viewPersonsListActivity_.selectedPersons_)
                 p.getPersonListView().setBackgroundColor(Color.BLUE);
 
@@ -71,9 +67,10 @@ public class SendCarFromListFabListener implements View.OnClickListener{
             viewPersonsListActivity_.refresh();
             viewPersonsListActivity_.rideGroupAdapter_.notifyDataSetChanged();
             viewPersonsListActivity_.personsListAdapter_.notifyDataSetChanged();
-
             viewPersonsListActivity_.selectedPersons_.clear();
+            viewPersonsListActivity_.updateButtonVisibility();
             Sheet.pushDataToOnlineSheet();
+
 
         }
     }

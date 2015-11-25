@@ -1,14 +1,9 @@
 package com.csm117.ridesplanner.onClickListeners;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.csm117.ridesplanner.ViewRidesActivity;
-import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.RideGroup;
 import com.csm117.ridesplanner.entities.Sheet;
 
@@ -25,7 +20,7 @@ public class MoveRiderFabListener implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if (viewRidesActivity_.selectedPersons_.size() == 2 && RideGroup.checkContainsDriver(viewRidesActivity_.selectedPersons_)){
+        if (viewRidesActivity_.selectedPersons_.size() == 2 && RideGroup.checkContainsExactlyOneDriver(viewRidesActivity_.selectedPersons_)){
             Snackbar.make(view, "Moving selected rider!", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 

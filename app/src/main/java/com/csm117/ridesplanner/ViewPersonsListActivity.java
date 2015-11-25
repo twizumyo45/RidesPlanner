@@ -110,8 +110,11 @@ public class ViewPersonsListActivity extends ViewNavigation{
                                         } else {
                                             addDriverToUnsent(new Driver(userInput.getText().toString()));
                                         }
+                                        refresh();
+                                        personsListAdapter_.notifyDataSetChanged();
+                                        Sheet.pushDataToOnlineSheet();
                                     }
-                                    refresh();
+
                                 })
                         .setNegativeButton("Cancel",
                                 new DialogInterface.OnClickListener() {

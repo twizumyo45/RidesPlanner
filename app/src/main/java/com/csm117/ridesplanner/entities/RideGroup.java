@@ -41,6 +41,9 @@ public class RideGroup {
                 return true;
             }
         }
+        if(driver==personToBeDeleted) {
+            driver.name_="";
+        }
         return false;
     }
 
@@ -114,5 +117,28 @@ public class RideGroup {
 
         Log.d("MoveRider", "stepNum: " + stepNum);
         return stepNum == 2;
+    }
+
+    public static RideGroup createRideGroupFromSelected(List<RideGroup> groupList, List<Person> personList) {
+        //find each person from personList in groupList
+        //if they are a driver, set as driver
+        //if they are a person, add that person to arraylist
+
+        String driverName="";
+        List<Person> riders = new ArrayList<Person>();
+
+        for(int i=0; i<personList.size(); i++) {
+            for(RideGroup g : groupList) {
+                if(g.riders.contains(personList.get(i))) {
+                    riders.add(personList.get(i));
+                }
+                else if(g.driver==personList.get(i)) {
+                    driverName = personList.get(i).name_;
+                }
+            }
+        }
+        Driver driver = new Driver(driverName);
+        RideGroup rideGroup = new RideGroup(driver, riders);
+        return rideGroup;
     }
 }

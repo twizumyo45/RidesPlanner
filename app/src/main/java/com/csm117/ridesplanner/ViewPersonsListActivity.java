@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
@@ -106,7 +108,8 @@ public class ViewPersonsListActivity extends ViewNavigation{
         }
         Collections.sort(unsentPersons);
 
-        ArrayAdapter<Person> personsListAdapter = new PersonsListAdapter(this, unsentPersons);
+        ArrayAdapter<Person> personsListAdapter = new PersonsListAdapter
+                (this, unsentPersons, this);
         personsList.setAdapter(personsListAdapter);
 
         // Setup RHS of the view (list of sent rideGroups)

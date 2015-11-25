@@ -75,8 +75,8 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
-                .setBackOff(new ExponentialBackOff());
-                //.setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
+                .setBackOff(new ExponentialBackOff())
+                .setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
 
         mSignedInAs = (TextView) this.findViewById(R.id.signed_in_as);
         mSigninButton = (Button) this.findViewById(R.id.sign_in_button);

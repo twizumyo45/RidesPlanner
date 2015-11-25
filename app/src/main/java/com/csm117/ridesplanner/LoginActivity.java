@@ -51,7 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     private TextView mOutputText;
     ProgressDialog mProgress;
     private TextView mSignedInAs;
-    private Button mSignInButton;
+    private Button mSigninButton;
+    private Button mSignoutButton;
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -78,25 +79,39 @@ public class LoginActivity extends AppCompatActivity {
                 //.setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
 
         mSignedInAs = (TextView) this.findViewById(R.id.signed_in_as);
-        mSignInButton = (Button) this.findViewById(R.id.sign_in_button);
+        mSigninButton = (Button) this.findViewById(R.id.sign_in_button);
         if (mCredential.getSelectedAccountName() != null) {
             mSignedInAs.setText(mCredential.getSelectedAccountName());
-            mSignInButton.setText("Verify app permissions");
+            mSigninButton.setText("Verify app permissions");
         }
 
-        mSignInButton.setOnClickListener(new View.OnClickListener() {
+        mSigninButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isGooglePlayServicesAvailable()) {
                     refreshResults();
                 } else {
                     Snackbar.make(view, "Google Play Services required: " +
-                            "after installing, close and relaunch this app.",
+                                    "after installing, close and relaunch this app.",
                             Snackbar.LENGTH_SHORT)
                             .setAction("Action", null).show();
                 }
             }
         });
+
+        mSignoutButton = (Button) this.findViewById(R.id.sign_out_button);
+        mSignoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mCredential.getSelectedAccountName() != null) {
+                    mCredential.setSelectedAccountName(null);
+                    mSigninButton.setText("Sign In Or Register");
+                    mSignedInAs.setText("n/a");
+                }
+            }
+        });
+
+
 
     }
 
@@ -171,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.apply();
                         mSignedInAs.setText(accountName);
                         mProgress.setMessage("Signed in as: " + accountName);
-                        mSignInButton.setText("Verify app permissions");
+                        mSigninButton.setText("Verify app permissions");
 
                     }
                 } else if (resultCode == RESULT_CANCELED) {

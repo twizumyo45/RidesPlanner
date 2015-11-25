@@ -1,14 +1,22 @@
 package com.csm117.ridesplanner;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 
+import com.csm117.ridesplanner.entities.Driver;
 import com.csm117.ridesplanner.entities.RideGroup;
+import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Person;
 import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.SendCarFromListFabListener;
@@ -113,6 +121,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
         personsListAdapter_ = new PersonsListAdapter(this, unsentPersons_, this);
         personsList.setAdapter(personsListAdapter_);
+
 
         // Setup RHS of the view (list of sent rideGroups)
         Log.d("SplitView", "Size of sentRidesGroup: " + sentRidesGroup_.size());

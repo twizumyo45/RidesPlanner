@@ -14,6 +14,7 @@ import com.csm117.ridesplanner.entities.Sheet;
 
 import java.util.ArrayList;
 
+
 /**
  * Created by Roger on 11/23/2015.
  */
@@ -73,6 +74,7 @@ public class SendCarFromListFabListener implements View.OnClickListener{
 
             viewPersonsListActivity_.selectedPersons_.clear();
             Sheet.pushDataToOnlineSheet();
+
         }
     }
 }

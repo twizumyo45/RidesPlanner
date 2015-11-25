@@ -21,6 +21,7 @@ import com.csm117.ridesplanner.entities.Rider;
 import com.csm117.ridesplanner.entities.Sheet;
 import com.csm117.ridesplanner.onClickListeners.SendCarFromListFabListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import java.util.Collections;
@@ -36,6 +37,25 @@ public class ViewPersonsListActivity extends ViewNavigation{
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
     public static ArrayAdapter<RideGroup> rideGroupAdapter_;
     public static ArrayAdapter<Person> personsListAdapter_;
+
+    public void addToUnsent(Rider p){
+        for(RideGroup r : unsentRidesGroup_){
+            r.add(p);
+            return;
+        }
+
+        ArrayList<Person> ridersList = new ArrayList<Person>();
+        ridersList.add(p);
+                //no
+        // current
+        // rideGroups
+        unsentRidesGroup_.add(new RideGroup(new Driver(""), ridersList));
+    }
+
+    public void addDriverToUnsent(Driver d){
+        ArrayList<Person> ridersList = new ArrayList<Person>();
+        unsentRidesGroup_.add(new RideGroup(d, ridersList));
+    }
 
     public void refresh(){
         unsentPersons_.clear();
@@ -56,7 +76,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
         unsentRidesGroup_ = Sheet.getUnsentRideGroups();
         sentRidesGroup_ = Sheet.getSentRideGroups();
         final Context context = this;
-/*
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,11 +106,12 @@ public class ViewPersonsListActivity extends ViewNavigation{
                                         // edit text
                                         //m_Text = userInput.getText());
                                         if (riderRadio.isChecked()) {
-                                            unsentPersons_.add(new Rider(userInput.getText().toString()));
+                                            addToUnsent(new Rider(userInput.getText().toString()));
                                         } else {
-                                            unsentPersons_.add(new Driver(userInput.getText().toString()));
+                                            addDriverToUnsent(new Driver(userInput.getText().toString()));
                                         }
                                     }
+                                    refresh();
                                 })
                         .setNegativeButton("Cancel",
                                 new DialogInterface.OnClickListener() {
@@ -107,7 +128,7 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
             }
 
-        });*/
+        });
 
         // Setup LHS of the view (list of unsent people)
         ListView personsList = (ListView) findViewById(R.id.personsList);

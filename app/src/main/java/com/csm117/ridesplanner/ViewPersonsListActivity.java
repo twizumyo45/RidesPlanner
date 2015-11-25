@@ -22,11 +22,21 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
     List<RideGroup> unsentRidesGroup_;
     List<RideGroup> sentRidesGroup_;
+    List<Person> unsentPersons_;
     private String m_Text = "";
     public ArrayList<Person> selectedPersons_ = new ArrayList<Person>();
     public static ArrayAdapter<RideGroup> rideGroupAdapter_;
     public static ArrayAdapter<Person> personsListAdapter_;
 
+    public void refresh(){
+        unsentPersons_.clear();
+        for(RideGroup rg: unsentRidesGroup_){
+            unsentPersons_.add(rg.driver);
+            for(Person rider: rg.riders)
+                unsentPersons_.add(rider);
+        }
+        Collections.sort(unsentPersons_);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         selectedPersons_ = new ArrayList<Person>();
@@ -93,15 +103,15 @@ public class ViewPersonsListActivity extends ViewNavigation{
 
         // Setup LHS of the view (list of unsent people)
         ListView personsList = (ListView) findViewById(R.id.personsList);
-        List<Person> unsentPersons = new ArrayList<>();
+        unsentPersons_ = new ArrayList<>();
         for(RideGroup rg: unsentRidesGroup_){
-            unsentPersons.add(rg.driver);
+            unsentPersons_.add(rg.driver);
             for(Person rider: rg.riders)
-                unsentPersons.add(rider);
+                unsentPersons_.add(rider);
         }
-        Collections.sort(unsentPersons);
+        Collections.sort(unsentPersons_);
 
-        personsListAdapter_ = new PersonsListAdapter(this, unsentPersons, this);
+        personsListAdapter_ = new PersonsListAdapter(this, unsentPersons_, this);
         personsList.setAdapter(personsListAdapter_);
 
         // Setup RHS of the view (list of sent rideGroups)

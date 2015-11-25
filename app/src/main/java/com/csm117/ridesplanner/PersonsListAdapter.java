@@ -1,6 +1,7 @@
 package com.csm117.ridesplanner;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,17 +44,19 @@ public class PersonsListAdapter extends ArrayAdapter<Person> {
         LinearLayout personsLinearLayout =
                 (LinearLayout) convertView.findViewById(R.id.persons);
         personsLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        personsLinearLayout.setBackgroundColor(Color.TRANSPARENT);
 
         personsLinearLayout.removeAllViews();
         TextView personTextView = new TextView(super.getContext());
         personTextView.setText(unsentPerson.toString());
         personTextView.setTypeface(unsentPerson.getTypeface());
+        personTextView.setBackgroundColor(Color.TRANSPARENT);
 
         OnClickPersonViewListener onClickPersonViewListener = new OnClickPersonViewListener(viewPersonsListActivity_, unsentPerson);
         personsLinearLayout.setOnClickListener(onClickPersonViewListener);
         //personTextView.setOnClickListener(onClickPersonViewListener);
         personsLinearLayout.addView(personTextView);
-        unsentPerson.setPersonListView_(personTextView);
+        unsentPerson.setPersonListView_(personsLinearLayout);
 
         // Return the completed view to render on screen
         return convertView;

@@ -2,6 +2,7 @@ package com.csm117.ridesplanner.entities;
 
 import android.graphics.Typeface;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -10,7 +11,7 @@ import android.widget.TextView;
 public abstract class Person implements Comparable<Person>{
     String name_;
     private TextView rideGroupView_;
-    private TextView personListView_;
+    private LinearLayout personListView_;
 
     public Person(String name){
         this.name_ = name;
@@ -27,10 +28,10 @@ public abstract class Person implements Comparable<Person>{
         rideGroupView_ = rgv;
     }
 
-    public TextView getPersonListView(){
+    public LinearLayout getPersonListView(){
         return personListView_;
     }
-    public void setPersonListView_(TextView plv){
+    public void setPersonListView_(LinearLayout plv){
         personListView_ = plv;
     }
 

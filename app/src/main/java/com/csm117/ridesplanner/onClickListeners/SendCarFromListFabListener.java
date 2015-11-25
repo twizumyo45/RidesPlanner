@@ -29,6 +29,10 @@ public class SendCarFromListFabListener implements View.OnClickListener{
     public void onClick(View view) {
         Log.d("send", "SENTCLICK!");
         if(viewPersonsListActivity_.selectedPersons_.size()>=1 && RideGroup.checkContainsDriver(viewPersonsListActivity_.selectedPersons_)) {
+            for(Person p: viewPersonsListActivity_.selectedPersons_)
+                p.getPersonListView().setBackgroundColor(Color.BLUE);
+
+
             RideGroup newRideGroup = RideGroup.createRideGroupFromSelected(viewPersonsListActivity_.selectedPersons_);
             Sheet.getSentRideGroups().add(newRideGroup);
 
@@ -63,12 +67,7 @@ public class SendCarFromListFabListener implements View.OnClickListener{
             }
             Sheet.getUnsentRideGroups().remove(indexRgToRmv);
 
-
-
-            for(Person p: viewPersonsListActivity_.selectedPersons_)
-                p.getPersonListView().setVisibility(View.INVISIBLE);
-
-            //viewPersonsListActivity_.refresh();
+            viewPersonsListActivity_.refresh();
             viewPersonsListActivity_.rideGroupAdapter_.notifyDataSetChanged();
             viewPersonsListActivity_.personsListAdapter_.notifyDataSetChanged();
 
